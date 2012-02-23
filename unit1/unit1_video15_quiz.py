@@ -18,7 +18,9 @@ def sense(p, Z):
     for i in range(len(q)):
         q[i] = q[i] / s
     return q
-#
-#ADD YOUR CODE HERE
-#
+
+for i in range(len(measurements)):
+    q = sense(p, measurements[i])
+    p = q
+
 print p
