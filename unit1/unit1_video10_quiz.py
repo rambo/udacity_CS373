@@ -10,10 +10,8 @@ pMiss = 0.2
 
 sense = [pMiss, pHit, pHit, pMiss, pMiss]
 post = []
-psum=0
 for i in range(len(sense)):
     post.append(p[i] * sense[i])
-    psum = psum + post[i]
 p = post
 
-print p
+print sum(p)
