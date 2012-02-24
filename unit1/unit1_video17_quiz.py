@@ -19,9 +19,9 @@ def sense(p, Z):
     return q
 
 def move(p, U):
-    #
-    #ADD CODE HERE
-    #
-    return q
+    import collections
+    c = collections.deque(p)
+    c.rotate(U)
+    return list(c)
 
 print move(p, 1)
