@@ -19,9 +19,7 @@ def sense(p, Z):
     return q
 
 def move(p, U):
-    import collections
-    c = collections.deque(p)
-    c.rotate(U)
-    return list(c)
+    U = U % len(p) * -1
+    return p[U:] + p[:U]
 
 print move(p, 1)
