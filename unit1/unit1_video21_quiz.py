@@ -41,10 +41,11 @@ def move(p, U):
     q = sum_lists(sum_lists(pE, pU), pO)
     return q
 
-for i in range(100):
+for i in range(2):
     p = move(p, 1)
 
 print p
+print sum(p)
 
 
 
