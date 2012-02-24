@@ -1,8 +1,4 @@
-#Given the list motions=[1,1] which means the robot 
-#moves right and then right again, compute the posterior 
-#distribution if the robot first senses red, then moves 
-#right one, then senses green, then moves right again, 
-#starting with a uniform prior distribution.
+#Modify the previous code so that the robot senses red twice.
 
 p=[0.2, 0.2, 0.2, 0.2, 0.2]
 world=['green', 'red', 'red', 'green', 'green']
@@ -33,12 +29,8 @@ def move(p, U):
         q.append(s)
     return q
 
-
-for i in range(2):
-    p = sense(p, measurements[i])
-#    print "p after sense %d: %s" % (i, p)
-    p = move(p, motions[i])
-#    print "p after move %d: %s" % (i, p)
-
+for k in range(len(measurements)):
+    p = sense(p, measurements[k])
+    p = move(p, motions[k])
+    
 print p         
-print sum(p)
