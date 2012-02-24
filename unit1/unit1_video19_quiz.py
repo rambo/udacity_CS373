@@ -2,7 +2,7 @@
 #q, shifted to the right by U units. If U=0, q should 
 #be the same as p.
 
-p=[0.0, 0.5, 0.0, 0.5, 0.0]
+p=[0.2, 0.2, 0.2, 0.2, 0.2]
 world=['green', 'red', 'red', 'green', 'green']
 measurements = ['red', 'green']
 pHit = 0.6
