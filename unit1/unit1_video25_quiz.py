@@ -32,7 +32,13 @@ def move(p, U):
         s = s + pUndershoot * p[(i-U+1) % len(p)]
         q.append(s)
     return q
-#
-# ADD CODE HERE
-#
+
+
+for i in range(2):
+    p = sense(p, measurements[i])
+#    print "p after sense %d: %s" % (i, p)
+    p = move(p, motions[i])
+#    print "p after move %d: %s" % (i, p)
+
 print p         
+print sum(p)
