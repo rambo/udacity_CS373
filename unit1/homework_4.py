@@ -45,9 +45,10 @@ def pivot_array(p):
             subp.append(p[row][col])
         p_rotated.append(subp)
     return p_rotated
+#print "pre privot"
+#show(p)
+#print "after pivot"
 #show(pivot_array(p))
-
-
 
 # Helper to calculate the sum of 2d array
 def array_sum_2d(p):
@@ -87,13 +88,31 @@ def array_add_2d(p1, p2):
     return q;
 #show(array_add_2d(p,p))
 
+# IMO the list-comprehensions are cleaner than the "official" example (and since we cannot import anything we can't use any optimized types like deque:s)
+def move_exact_1d(p, U):
+    U = U % len(p) * -1
+    return p[U:] + p[:U]
+
+# Exact moving in 2D array
 def move_exact_2d(p, U):
     # Special case
     if (U == [0,0]):
         return p 
-    
-    
+    if (U[0] != 0):
+        p_pivot = pivot_array(p)
+        for i in range(len(p_pivot)):
+            p_pivot[i] = move_exact_1d(p_pivot[i], U[0])
+        p = pivot_array(p_pivot)
+    if (U[1] != 0):
+        for i in range(len(p)):
+            p[i] = move_exact_1d(p[i], U[1])
     return p
+# Set a value we can track when moving
+#p[1][1] = 1.0
+#print "p before move"
+#show(p)
+#print "p after (exact) move"
+#show(move_exact_2d(p, [0, 1]))
 
 # Inexact moving
 def move_2d(p, U):
@@ -103,15 +122,14 @@ def move_2d(p, U):
     pM = array_mul_2d(move_exact_2d(p, U), p_move)
     pNM = array_mul_2d(move_exact_2d(p, [0,0]), 1.0-p_move)
     return array_add_2d(pM, pNM)
-    
-    
-    
 
+# Set a value we can track when moving
+#p[1][1] = 1.0
+#print "p before move"
+#show(p)
+#print "p after move"
+#show(move_2d(p, [0, 1]))
 
-# my odl list-slicing move
-#def move(p, U):
-#    U = U % len(p) * -1
-#    return p[U:] + p[:U]
 
 
 # old inexact motion examples
@@ -139,8 +157,9 @@ def move_2d(p, U):
 
 #Your probability array must be printed 
 #with the following code.
-print "The final show, do not forget this"
-show(p)
+
+#print "The final show, do not forget this"
+#show(p)
 
 
 

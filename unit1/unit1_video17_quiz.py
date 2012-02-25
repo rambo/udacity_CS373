@@ -22,4 +22,4 @@ def move(p, U):
     U = U % len(p) * -1
     return p[U:] + p[:U]
 
-print move(p, 1)
+print move(p, -4)
