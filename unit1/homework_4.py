@@ -25,15 +25,23 @@ def show(p):
 p = []
 
 # Assume (know) all rows have same length
-n_cells = len(colors) * len(colors[0])
+rows = len(colors)
+cols = len(colors[0])
+n_cells =  rows * cols
 p_per_cell = 1.0 / n_cells
-#print "%d cells, %f p of each cell" % (n_cells, p_per_cell)
-# initialize uniform distribution
-for i in range(len(colors)):
-    subp = []
-    for i in range(len(colors[0])):
-        subp.append(p_per_cell)
-    p.append(subp)
+p = rows * [cols * [p_per_cell]]
+
+
+
+# This will reference P by columns instead of rows
+p_rotated = []
+for col in range(cols):
+    pass
+    
+
+
+
+
 
 # Helper to calculate the sum of 2d array
 def array_sum_2d(p):
@@ -46,6 +54,7 @@ def array_sum_2d(p):
 # Helper to normalize the array
 def normalize(p):
     s = array_sum_2d(p)
+    # TODO: switch to map ?
     for row in range(len(p)):
         # "in-place" (not actually, there will be temp lists created in memory) divide each item of the row by s
         p[row][:] = [x / s for x in p[row]]
@@ -54,13 +63,16 @@ def normalize(p):
 
 # Helper to do the multiplications on array
 def array_mul_2d(p, mul_by):
+    # TODO: switch to map ?
     for row in range(len(p)):
-        # "in-place" (not actually, there will be temp lists created in memory) divide each item of the row by s
+        # "in-place" (not actually, there will be temp lists created in memory) multiply each item of the row by given value
         p[row][:] = [x * mul_by for x in p[row]]
     return p
 
+# helper to add two arrays to each other
 def array_add_2d(p1, p2):
     q = []
+    # TODO: switch to map ?
     for row in range(len(p1)):
         subq = []
         for col in range(len(p1[row])):
@@ -77,8 +89,15 @@ def move_exact_2d(p, U):
     
     return p
 
+# Inexact moving
 def move_2d(p, U):
-    pass
+    # Special case
+    if (U == [0,0]):
+        return p
+    pM = array_mul_2d(move_exact_2d(p, U), p_move)
+    pNM = array_mul_2d(move_exact_2d(p, [0,0]), 1.0-p_move)
+    return array_add_2d(pM, pNM)
+    
     
     
 
