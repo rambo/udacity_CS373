@@ -29,29 +29,23 @@ rows = len(colors)
 cols = len(colors[0])
 n_cells = rows * cols
 p_per_cell = 1.0 / n_cells
-#print "%d cells, %f p of each cell" % (n_cells, p_per_cell)
-# initialize uniform distribution
+# initialize uniform distribution (The list comprehensions caused funky issues due to pointers being created instead of objects)
 for row in range(rows):
     subp = []
     for col in range(cols):
         subp.append(p_per_cell)
     p.append(subp)
-# The list comprehensions caused funky issues due to pointers being created instead of objects
 
-# This will reference P by columns instead of rows
-p_rotated = []
-# first initialize
-for col in range(cols):
-    subp = []
-    for row in range(rows):
-        subp[len(subp):] = [p[row][col]]
-    p_rotated.append(subp)
-
-p[0][3] = 2.0
-show(p)
-show(p_rotated)
-
-
+# Helper to pivot an array (as in switch columns to rows and vice versa)
+def pivot_array(p):
+    p_rotated = []
+    for col in range(len(p[0])):
+        subp = []
+        for row in range(len(p)):
+            subp.append(p[row][col])
+        p_rotated.append(subp)
+    return p_rotated
+#show(pivot_array(p))
 
 
 
