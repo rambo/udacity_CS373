@@ -122,13 +122,36 @@ def move_2d(p, U):
     pM = array_mul_2d(move_exact_2d(p, U), p_move)
     pNM = array_mul_2d(move_exact_2d(p, [0,0]), 1.0-p_move)
     return array_add_2d(pM, pNM)
-
 # Set a value we can track when moving
 #p[1][1] = 1.0
 #print "p before move"
 #show(p)
 #print "p after move"
 #show(move_2d(p, [0, 1]))
+
+# official sense example (in 1D)
+#def sense(p, Z):
+#    q=[]
+#    for i in range(len(p)):
+#        hit = (Z == world[i])
+#        q.append(p[i] * (hit * pHit + (1-hit) * pMiss))
+#    s = sum(q)
+#    for i in range(len(q)):
+#        q[i] = q[i] / s
+#    return q
+
+def sense(p, Z):
+    print "NOT IMPLEMENTED: sense"
+
+
+# Test full (exact) motions
+p[0][1] = 1.0
+print "p before moves"
+show(p)
+for i in range(len(motions)):
+    p = move_exact_2d(p, motions[i])
+print "p after (exact) moves"
+show(p)
 
 
 #Your probability array must be printed 
