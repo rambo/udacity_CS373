@@ -131,30 +131,6 @@ def move_2d(p, U):
 #show(move_2d(p, [0, 1]))
 
 
-
-# old inexact motion examples
-#def move_exact(p, U):
-#    q = []
-#    for i in range(len(p)):
-#        q.append(p[(i-U)%len(p)])
-#    return q
-#
-#def sum_lists(p1, p2):
-#    q = []
-#    for i in range(len(p1)):
-#        q.append(p1[i] + p2[i])
-#    return q
-#
-#
-#def move(p, U):
-#    pE = [x * pExact for x in move_exact(p, U)]
-#    pO = [x * pOvershoot for x in move_exact(p, U+1)]
-#    pU = [x * pUndershoot for x in move_exact(p, U-1)]
-#    q = sum_lists(sum_lists(pE, pU), pO)
-#    return q
-
-
-
 #Your probability array must be printed 
 #with the following code.
 
