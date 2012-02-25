@@ -13,6 +13,7 @@ def sense(p, Z):
     q=[]
     for i in range(len(p)):
         hit = (Z == world[i])
+        print (hit * pHit + (1-hit) * pMiss)
         q.append(p[i] * (hit * pHit + (1-hit) * pMiss))
     s = sum(q)
     for i in range(len(q)):

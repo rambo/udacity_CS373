@@ -27,7 +27,7 @@ p = []
 # Assume (know) all rows have same length
 n_cells = len(colors) * len(colors[0])
 p_per_cell = 1.0 / n_cells
-print "%d cells, %f p of each cell" % (n_cells, p_per_cell)
+#print "%d cells, %f p of each cell" % (n_cells, p_per_cell)
 # initialize uniform distribution
 for i in range(len(colors)):
     subp = []
@@ -38,14 +38,22 @@ for i in range(len(colors)):
 # Helper to calculate the sum of 2d array
 def array_sum_2d(p):
     tsum = 0 
-    for i in range(len(p)):
-        tsum = tsum + sum(p[i])
+    for row in range(len(p)):
+        tsum = tsum + sum(p[row])
     return tsum
+#print array_sum_2d(p)
+
+# Helper to normalize the array
+def normalize(p):
+    s = array_sum_2d(p)
+    for row in range(len(p)):
+        # "in-place" (not actually, there will be temp lists created in memory) divide each item of the row by s
+        p[row][:] = [x / s for x in p[row]]
+    return p
+#show(normalize(p))
 
 
     
-print array_sum_2d(p)
-
 
 
 
