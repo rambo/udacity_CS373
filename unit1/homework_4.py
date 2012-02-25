@@ -31,9 +31,9 @@ n_cells = rows * cols
 p_per_cell = 1.0 / n_cells
 #print "%d cells, %f p of each cell" % (n_cells, p_per_cell)
 # initialize uniform distribution
-for i in range(rows):
+for row in range(rows):
     subp = []
-    for i in range(cols):
+    for col in range(cols):
         subp.append(p_per_cell)
     p.append(subp)
 # The list comprehensions caused funky issues due to pointers being created instead of objects
@@ -41,21 +41,15 @@ for i in range(rows):
 # This will reference P by columns instead of rows
 p_rotated = []
 # first initialize
-for i in range(cols):
-    subp = []
-    for i in range(rows):
-        subp.append(p_per_cell)
-    p_rotated.append(subp)
-# Then set the pointers
 for col in range(cols):
+    subp = []
     for row in range(rows):
-        p_rotated[col][row] = p[row][col]
+        subp[len(subp):] = [p[row][col]]
+    p_rotated.append(subp)
 
 p[0][3] = 2.0
 show(p)
 show(p_rotated)
-
-    
 
 
 
