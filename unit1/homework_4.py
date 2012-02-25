@@ -22,6 +22,10 @@ def show(p):
 #HOMEWORK TO BE GRADED
 #INCORRECT
 
+
+# REMINDER: move first, sense then.
+
+
 p = []
 
 # Assume (know) all rows have same length
@@ -140,25 +144,29 @@ def move_2d(p, U):
 #        q[i] = q[i] / s
 #    return q
 
-def sense(p, Z):
+def sense_2d(p, Z):
     print "NOT IMPLEMENTED: sense"
+    return p
 
 
 # Test full (exact) motions
-p[0][1] = 1.0
-print "p before moves"
-show(p)
-for i in range(len(motions)):
-    p = move_exact_2d(p, motions[i])
-print "p after (exact) moves"
-show(p)
+#p[0][1] = 1.0
+#print "p before moves"
+#show(p)
+#for i in range(len(motions)):
+#    p = move_exact_2d(p, motions[i])
+#print "p after (exact) moves"
+#show(p)
 
+for i in range(len(motions)):
+    p = move_2d(p, motions[i])
+    p = sense_2d(p, measurements[i])
 
 #Your probability array must be printed 
 #with the following code.
 
-#print "The final show, do not forget this"
-#show(p)
+print "The final show, do not forget this"
+show(p)
 
 
 
