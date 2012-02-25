@@ -27,16 +27,34 @@ p = []
 # Assume (know) all rows have same length
 rows = len(colors)
 cols = len(colors[0])
-n_cells =  rows * cols
+n_cells = rows * cols
 p_per_cell = 1.0 / n_cells
-p = rows * [cols * [p_per_cell]]
-
-
+#print "%d cells, %f p of each cell" % (n_cells, p_per_cell)
+# initialize uniform distribution
+for i in range(rows):
+    subp = []
+    for i in range(cols):
+        subp.append(p_per_cell)
+    p.append(subp)
+# The list comprehensions caused funky issues due to pointers being created instead of objects
 
 # This will reference P by columns instead of rows
 p_rotated = []
+# first initialize
+for i in range(cols):
+    subp = []
+    for i in range(rows):
+        subp.append(p_per_cell)
+    p_rotated.append(subp)
+# Then set the pointers
 for col in range(cols):
-    pass
+    for row in range(rows):
+        p_rotated[col][row] = p[row][col]
+
+p[0][3] = 2.0
+show(p)
+show(p_rotated)
+
     
 
 
@@ -133,7 +151,7 @@ def move_2d(p, U):
 
 #Your probability array must be printed 
 #with the following code.
-
+print "The final show, do not forget this"
 show(p)
 
 
