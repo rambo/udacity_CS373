@@ -37,8 +37,18 @@ p_per_cell = 1.0 / n_cells
 for row in range(rows):
     subp = []
     for col in range(cols):
-        subp.append(p_per_cell)
+        subp.append(float(p_per_cell))
     p.append(subp)
+
+def copy_array(p):
+    q = []
+    for row in range(len(p)):
+        subq = []
+        for col in range(len(p[0])):
+            subq.append(float(p[row][col]))
+        q.append(subq)
+    return q
+    
 
 # Helper to pivot an array (as in switch columns to rows and vice versa)
 def pivot_array(p):
@@ -46,7 +56,7 @@ def pivot_array(p):
     for col in range(len(p[0])):
         subp = []
         for row in range(len(p)):
-            subp.append(p[row][col])
+            subp.append(float(p[row][col]))
         p_rotated.append(subp)
     return p_rotated
 #print "pre privot"
@@ -66,19 +76,19 @@ def array_sum_2d(p):
 def normalize(p):
     s = array_sum_2d(p)
     # TODO: switch to map ?
+    q = copy_array(p)
     for row in range(len(p)):
-        # "in-place" (not actually, there will be temp lists created in memory) divide each item of the row by s
-        p[row][:] = [x / s for x in p[row]]
-    return p
+        q[row][:] = [x / s for x in p[row]]
+    return q
 #show(normalize(p))
 
 # Helper to do the multiplications on array
 def array_mul_2d(p, mul_by):
     # TODO: switch to map ?
+    q = copy_array(p)
     for row in range(len(p)):
-        # "in-place" (not actually, there will be temp lists created in memory) multiply each item of the row by given value
-        p[row][:] = [x * mul_by for x in p[row]]
-    return p
+        q[row][:] = [x * mul_by for x in p[row]]
+    return q
 
 # helper to add two arrays to each other
 def array_add_2d(p1, p2):
@@ -101,16 +111,17 @@ def move_exact_1d(p, U):
 def move_exact_2d(p, U):
     # Special case
     if (U == [0,0]):
-        return p 
+        return p
+    q = copy_array(p)
     if (U[0] != 0):
-        p_pivot = pivot_array(p)
-        for i in range(len(p_pivot)):
-            p_pivot[i] = move_exact_1d(p_pivot[i], U[0])
-        p = pivot_array(p_pivot)
+        q_pivot = pivot_array(q)
+        for i in range(len(q_pivot)):
+            q_pivot[i] = move_exact_1d(q_pivot[i], U[0])
+        q = pivot_array(q_pivot)
     if (U[1] != 0):
-        for i in range(len(p)):
-            p[i] = move_exact_1d(p[i], U[1])
-    return p
+        for i in range(len(q)):
+            q[i] = move_exact_1d(q[i], U[1])
+    return q
 # Set a value we can track when moving
 #p[1][1] = 1.0
 #print "p before move"
@@ -124,15 +135,25 @@ def move_2d(p, U):
     if (U == [0,0]):
         return p
     pM = array_mul_2d(move_exact_2d(p, U), p_move)
+    print "pM"
+    show(pM)
+    print "p"
+    show(p)
     pNM = array_mul_2d(move_exact_2d(p, [0,0]), 1.0-p_move)
+    print "pNM"
+    show(pNM)
+    print "p"
+    show(pNM)
+    print "returning"
     return array_add_2d(pM, pNM) 
 # Set a value we can track when moving
 p = array_mul_2d(p, 0)
 p[1][1] = 1.0
 print "p before move"
 show(p)
+p = move_2d(p, [0, 1])
 print "p after move"
-show(move_2d(p, [0, 1]))
+show(p)
 print "p after normalizing (it should not have changed)"
 show(normalize(p))
 
