@@ -125,13 +125,16 @@ def move_2d(p, U):
         return p
     pM = array_mul_2d(move_exact_2d(p, U), p_move)
     pNM = array_mul_2d(move_exact_2d(p, [0,0]), 1.0-p_move)
-    return array_add_2d(pM, pNM)
+    return array_add_2d(pM, pNM) 
 # Set a value we can track when moving
-#p[1][1] = 1.0
-#print "p before move"
-#show(p)
-#print "p after move"
-#show(move_2d(p, [0, 1]))
+p = array_mul_2d(p, 0)
+p[1][1] = 1.0
+print "p before move"
+show(p)
+print "p after move"
+show(move_2d(p, [0, 1]))
+print "p after normalizing (it should not have changed)"
+show(normalize(p))
 
 # official sense example (in 1D)
 #def sense(p, Z):
@@ -145,8 +148,17 @@ def move_2d(p, U):
 #    return q
 
 def sense_2d(p, Z):
-    print "NOT IMPLEMENTED: sense"
-    return p
+    pHit = sensor_right
+    pMiss = 1.0 - sensor_right
+    q = []
+    for row in range(rows):
+        subq = []
+        for col in range(cols):
+            hit = (Z == colors[row][col])
+            cell_result = p[row][col] * (hit * pHit + (1-hit) * pMiss)
+            subq.append(cell_result)
+        q.append(subp)
+    return normalize(q)
 
 
 # Test full (exact) motions
@@ -158,6 +170,7 @@ def sense_2d(p, Z):
 #print "p after (exact) moves"
 #show(p)
 
+# REMINDER: move first, sense then.
 for i in range(len(motions)):
     p = move_2d(p, motions[i])
     p = sense_2d(p, measurements[i])
