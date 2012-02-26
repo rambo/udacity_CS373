@@ -197,18 +197,18 @@ def sense_2d(p, Z):
 #show(p)
 
 # REMINDER: move first, sense then.
-#for i in range(len(motions)):
-#    p = move_2d(p, motions[i])
-#    print "p after move_2d(p, %s)" % motions[i]
-#    show(p)
-#    p = sense_2d(p, measurements[i])
-#    print "p after sense_2d(p, %s)" % measurements[i]
-#    show(p)
+for i in range(len(motions)):
+    p = move_2d(p, motions[i])
+    #print "p after move_2d(p, %s)" % motions[i]
+    #show(p)
+    p = sense_2d(p, measurements[i])
+    #print "p after sense_2d(p, %s)" % measurements[i]
+    #show(p)
 
 #Your probability array must be printed 
 #with the following code.
 
-print "The final show, do not forget this"
+#print "The final show, do not forget this"
 show(p)
 
 
