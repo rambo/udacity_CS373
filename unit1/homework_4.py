@@ -34,11 +34,15 @@ cols = len(colors[0])
 n_cells = rows * cols
 p_per_cell = 1.0 / n_cells
 # initialize uniform distribution (The list comprehensions caused funky issues due to pointers being created instead of objects)
-for row in range(rows):
-    subp = []
-    for col in range(cols):
-        subp.append(float(p_per_cell))
-    p.append(subp)
+def initialize_array(rows, cols, cell_value):
+    q = []
+    for row in range(rows):
+        subq = []
+        for col in range(cols):
+            subq.append(float(cell_value))
+        q.append(subq)
+    return q
+p = initialize_array(rows, cols, p_per_cell)
 
 def copy_array(p):
     q = []
@@ -77,8 +81,8 @@ def normalize(p):
     s = array_sum_2d(p)
     # TODO: switch to map ?
     q = copy_array(p)
-    for row in range(len(p)):
-        q[row][:] = [x / s for x in p[row]]
+    for row in range(len(q)):
+        q[row][:] = [x / s for x in q[row]]
     return q
 #show(normalize(p))
 
@@ -110,9 +114,9 @@ def move_exact_1d(p, U):
 # Exact moving in 2D array
 def move_exact_2d(p, U):
     # Special case
-    if (U == [0,0]):
-        return p
     q = copy_array(p)
+    if (U == [0,0]):
+        return q
     if (U[0] != 0):
         q_pivot = pivot_array(q)
         for i in range(len(q_pivot)):
@@ -133,29 +137,20 @@ def move_exact_2d(p, U):
 def move_2d(p, U):
     # Special case
     if (U == [0,0]):
-        return p
+        return copy_array(p)
     pM = array_mul_2d(move_exact_2d(p, U), p_move)
-    print "pM"
-    show(pM)
-    print "p"
-    show(p)
     pNM = array_mul_2d(move_exact_2d(p, [0,0]), 1.0-p_move)
-    print "pNM"
-    show(pNM)
-    print "p"
-    show(pNM)
-    print "returning"
-    return array_add_2d(pM, pNM) 
+    return array_add_2d(pM, pNM)
 # Set a value we can track when moving
-p = array_mul_2d(p, 0)
-p[1][1] = 1.0
-print "p before move"
-show(p)
-p = move_2d(p, [0, 1])
-print "p after move"
-show(p)
-print "p after normalizing (it should not have changed)"
-show(normalize(p))
+#tp = initialize_array(rows, cols, 0.0)
+#tp[1][1] = 1.0
+#print "tp before move"
+#show(tp)
+#tp = move_2d(tp, [0, 1])
+#print "tp after move"
+#show(tp)
+#print "tp after normalizing (it should not have changed)"
+#show(normalize(tp))
 
 # official sense example (in 1D)
 #def sense(p, Z):
@@ -178,8 +173,18 @@ def sense_2d(p, Z):
             hit = (Z == colors[row][col])
             cell_result = p[row][col] * (hit * pHit + (1-hit) * pMiss)
             subq.append(cell_result)
-        q.append(subp)
+            #print "cell %d,%d result %f" % (row,col,cell_result)
+        q.append(subq)
+    #print "non-normalized result"
+    #show(q)
     return normalize(q)
+#tp = copy_array(p)
+#print "tp before sense"
+#show(tp)
+#tp = sense_2d(tp, 'green')
+#print "tp after sense"
+#show(tp)
+
 
 
 # Test full (exact) motions
@@ -192,9 +197,13 @@ def sense_2d(p, Z):
 #show(p)
 
 # REMINDER: move first, sense then.
-for i in range(len(motions)):
-    p = move_2d(p, motions[i])
-    p = sense_2d(p, measurements[i])
+#for i in range(len(motions)):
+#    p = move_2d(p, motions[i])
+#    print "p after move_2d(p, %s)" % motions[i]
+#    show(p)
+#    p = sense_2d(p, measurements[i])
+#    print "p after sense_2d(p, %s)" % measurements[i]
+#    show(p)
 
 #Your probability array must be printed 
 #with the following code.
