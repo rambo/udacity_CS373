@@ -22,6 +22,12 @@ sig = 10000
 #Please print out ONLY the final values of the mean
 #and the variance in a list [mu, sig]. 
 
-# Insert code here
+
+for i in range(len(measurements)):
+    [mu, sig] = update(mu, sig, measurements[i], measurement_sig)
+    #print "after update %s" % repr([mu, sig])
+    [mu, sig] = predict(mu, sig, motion[i], motion_sig)
+    #print "after predict %s" % repr([mu, sig])
+
 
 print [mu, sig]
