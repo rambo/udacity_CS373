@@ -5,9 +5,9 @@
 
 
 def f(n):
-    #
-    # Insert code here
-    #
-    return
+    n = n - 1
+    fifth = n/5
+    n = n - fifth
+    return n
 
 print f(96.)
