@@ -11,7 +11,11 @@ def f6(n):
 
 def is_int(n):
     return abs(n-int(n)) < 0.0000001
-   
-# Enter code here.
+
+for i in range(10000,100000):
+    left = f6(float(i))
+    if is_int(left):
+        n = i
+        break
 
 print n
