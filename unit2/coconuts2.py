@@ -5,9 +5,6 @@
 
 
 def f(n):
-    n = n - 1
-    fifth = n/5
-    n = n - fifth
-    return n
+    return (n-1) / 5 * 4
 
 print f(96.)
