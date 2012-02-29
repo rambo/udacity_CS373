@@ -33,7 +33,8 @@ rows = len(colors)
 cols = len(colors[0])
 n_cells = rows * cols
 p_per_cell = 1.0 / n_cells
-# initialize uniform distribution (The list comprehensions caused funky issues due to pointers being created instead of objects)
+
+# initialize uniform distribution
 def initialize_array(rows, cols, cell_value):
     q = []
     for row in range(rows):
@@ -43,6 +44,7 @@ def initialize_array(rows, cols, cell_value):
         q.append(subq)
     return q
 p = initialize_array(rows, cols, p_per_cell)
+
 
 def copy_array(p):
     q = []
