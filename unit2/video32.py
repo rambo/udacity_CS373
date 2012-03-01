@@ -148,25 +148,29 @@ def filter(x, P):
     Ht = H.transpose()
 
     # DEBUGS, remove
+    print 'F= '
+    F.show()
+    print 'H= '
+    H.show()
     print 'Ft= '
     Ft.show()
     print 'Ht= '
     Ht.show()
+    print 'I= '
+    I.show()
 
     for n in range(len(measurements)):
         
         # measurement update
         # Calculate the intermediate matrices (oh my...)
-        z = H * x
-        y = F * P * Ft
+        #z = H * x #copied from the equation but I where to put the actual measurement then ?
+        z = matrix([[measurements[n]]])
+        y = z -  H * x
         S = H * P * Ht + R
         K = P * Ht * S.inverse()
-        # This is a funky way, why not have matrix.identity(dim) return the identity matrix ?
-        I = matrix([[0.]])
-        I.identity(len(K.transpose().value[0]))
 
         # DEBUGS, remove
-        print "Intermediates"
+        print "measurement intermediates"
         print 'z= '
         z.show()
         print 'y= '
@@ -175,8 +179,6 @@ def filter(x, P):
         S.show()
         print 'K= '
         K.show()
-        print 'I= '
-        I.show()
         print "K dimensions: %d,%d" % (K.dimx, K.dimy)
         print "y dimensions: %d,%d" % (y.dimx, y.dimy)
 
@@ -191,7 +193,8 @@ def filter(x, P):
         P.show()
         
         # prediction
-        x = F * x + u
+        # x = F * x + u # wrong according to http://www.udacity-forums.com/cs373/questions/9329/errors-in-units-2-30-and-2-31 ?
+        x = F * x
         P = F * P * Ft
         
         print "After prediction" # Comment out this line
