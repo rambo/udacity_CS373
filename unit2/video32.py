@@ -142,23 +142,59 @@ class matrix:
 
 # Reminder: x is state (position and velocity), P is confidence, Z is measurement, U is movement
 
-def measure(x, P, Z):
-    # TODO: implement
-    return [x, P]
-
-def predict(x, P, U):
-    # TODO: implement
-    return [x, P]
-
 def filter(x, P):
+    # Funnily enough those globals defined below can be read here
+    Ft = F.transpose()
+    Ht = H.transpose()
+
+    # DEBUGS, remove
+    print 'Ft= '
+    Ft.show()
+    print 'Ht= '
+    Ht.show()
+
     for n in range(len(measurements)):
         
         # measurement update
-        [x, P] = measure(x, P, measurements[n])
+        # Calculate the intermediate matrices (oh my...)
+        z = H * x
+        y = F * P * Ft
+        S = H * P * Ht + R
+        K = P * Ht * S.inverse()
+        # This is a funky way, why not have matrix.identity(dim) return the identity matrix ?
+        I = matrix([[0.]])
+        I.identity(len(K.transpose().value[0]))
+
+        # DEBUGS, remove
+        print "Intermediates"
+        print 'z= '
+        z.show()
+        print 'y= '
+        y.show()
+        print 'S= '
+        S.show()
+        print 'K= '
+        K.show()
+        print 'I= '
+        I.show()
+        print "K dimensions: %d,%d" % (K.dimx, K.dimy)
+        print "y dimensions: %d,%d" % (y.dimx, y.dimy)
+
+        x = x + (K * y)
+        P = (I - K * H) * P
+
+        # DEBUGS, remove
+        print "After measurement"
+        print 'x= '
+        x.show()
+        print 'P= '
+        P.show()
         
         # prediction
-        #[x, P] = predict(x, P, ) #um, how did we get that prediction step again ?
+        x = F * x + u
+        P = F * P * Ft
         
+        print "After prediction" # Comment out this line
         print 'x= '
         x.show()
         print 'P= '
@@ -179,3 +215,7 @@ R = matrix([[1.]]) # measurement uncertainty
 I = matrix([[1., 0.], [0., 1.]]) # identity matrix
 
 filter(x, P)
+
+
+
+
