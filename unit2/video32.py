@@ -140,12 +140,24 @@ class matrix:
 
 # Implement the filter function below
 
+# Reminder: x is state (position and velocity), P is confidence, Z is measurement, U is movement
+
+def measure(x, P, Z):
+    # TODO: implement
+    return [x, P]
+
+def predict(x, P, U):
+    # TODO: implement
+    return [x, P]
+
 def filter(x, P):
     for n in range(len(measurements)):
         
         # measurement update
+        [x, P] = measure(x, P, measurements[n])
         
         # prediction
+        #[x, P] = predict(x, P, ) #um, how did we get that prediction step again ?
         
         print 'x= '
         x.show()
