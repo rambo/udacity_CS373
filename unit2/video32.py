@@ -164,7 +164,7 @@ def filter(x, P):
         # measurement update
         # Calculate the intermediate matrices (oh my...)
         z = matrix([[measurements[n]]])
-        y = z -  H * x
+        y = z -  (H * x)
         S = H * P * Ht + R
         K = P * Ht * S.inverse()
 
@@ -182,7 +182,7 @@ def filter(x, P):
 #        print "y dimensions: %d,%d" % (y.dimx, y.dimy)
 
         x = x + (K * y)
-        P = (I - K * H) * P
+        P = (I - (K * H)) * P
 
         # DEBUGS, remove
 #        print "After measurement"
@@ -192,7 +192,7 @@ def filter(x, P):
 #        P.show()
         
         # prediction
-        # x = F * x + u # wrong according to http://www.udacity-forums.com/cs373/questions/9329/errors-in-units-2-30-and-2-31 ?
+        # x = (F * x) + u # wrong according to http://www.udacity-forums.com/cs373/questions/9329/errors-in-units-2-30-and-2-31 ?
         x = F * x
         P = F * P * Ft
         
