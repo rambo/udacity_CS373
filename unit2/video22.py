@@ -15,5 +15,4 @@ def move(mu,sigma2, u, r2):
     new_var = sigma2 + r2
     return [new_mean, new_var]
 
-print update(10.,8.,13., 2.)
-print move(8.0, 4.0, 10.0, 6.0)
+print update(10.,4.,10., 4.)
