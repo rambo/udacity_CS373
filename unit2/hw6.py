@@ -182,12 +182,25 @@ u = matrix([[0.], [0.], [0.], [0.]]) # external motion
 #### DO NOT MODIFY ANYTHING ABOVE HERE ####
 #### fill this in, remember to use the matrix() function!: ####
 
-P =  matrix([[0.0]]) # initial uncertainty
+# P initialized x,y has zero uncertainty, for velocities 1000
+# R "has 0.1 as diagonal? as the measurement noise"
+#
+
+
+
+P =  matrix([[0.0,0.0],[0.0,0.0],[0.0,1000.0],[0.0,1000.0]]) # initial uncertainty
 F =  matrix([[1.0,0.0,dt,0.0],[0.0,1.0,0.0,dt],[0.0,0.0,1.0,0.0],[0.0,0.0,0.0,1.0]]) # next state function
-H =  matrix([[0.0]]) # measurement function
+H =  matrix([[1.0,1.0,0.0,0.0]]) # measurement function
 R =  matrix([[0.0]]) # measurement uncertainty
 I =  matrix([[0.0]])
 I.identity(F.dimx) # identity matrix
+
+foo = H * x
+print "foo="
+foo.show()
+print "x="
+x.show()
+
 
 print "P="
 P.show()
