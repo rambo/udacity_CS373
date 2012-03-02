@@ -182,12 +182,25 @@ u = matrix([[0.], [0.], [0.], [0.]]) # external motion
 #### DO NOT MODIFY ANYTHING ABOVE HERE ####
 #### fill this in, remember to use the matrix() function!: ####
 
-P =  # initial uncertainty
-F =  # next state function
-H =  # measurement function
-R =  # measurement uncertainty
-I =  # identity matrix
+P =  matrix([[0.0]]) # initial uncertainty
+F =  matrix([[1.0,0.0,dt,0.0],[0.0,1.0,0.0,dt],[0.0,0.0,1.0,0.0],[0.0,0.0,0.0,1.0]]) # next state function
+H =  matrix([[0.0]]) # measurement function
+R =  matrix([[0.0]]) # measurement uncertainty
+I =  matrix([[0.0]])
+I.identity(F.dimx) # identity matrix
+
+print "P="
+P.show()
+print "F="
+F.show()
+print "H="
+H.show()
+print "R="
+R.show()
+print "I="
+I.show()
 
 ###### DO NOT MODIFY ANYTHING HERE #######
 
-filter(x, P)
+# commented out for debuggin, REMEMBER TO REMOVE COMMENTS
+#filter(x, P)
