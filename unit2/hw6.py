@@ -206,7 +206,7 @@ R =  matrix([[0.1,0.0],[0.0,0.1]]) # measurement uncertainty
 I =  matrix([[0.0]])
 I.identity(F.dimx) # identity matrix
 
-## DEbugs, remember to remove!!
+## DEBUGS, remember to remove!!
 print "x="
 x.show()
 print "P="
