@@ -188,7 +188,7 @@ u = matrix([[0.], [0.], [0.], [0.]]) # external motion
 
 
 
-P =  matrix([[0.0,0.0],[0.0,0.0],[0.0,1000.0],[0.0,1000.0]]) # initial uncertainty
+P =  matrix([[0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0],[0.0,1000.0,0.0,1000.0],[0.0,1000.0,0.0,1000.0]]) # initial uncertainty
 F =  matrix([[1.0,0.0,dt,0.0],[0.0,1.0,0.0,dt],[0.0,0.0,1.0,0.0],[0.0,0.0,0.0,1.0]]) # next state function
 H =  matrix([[1.0,1.0,0.0,0.0]]) # measurement function
 R =  matrix([[0.1,0.0],[0.0,0.1]]) # measurement uncertainty
@@ -196,21 +196,38 @@ I =  matrix([[0.0]])
 I.identity(F.dimx) # identity matrix
 
 ## DEbugs, remember to remove!!
-foo = H * x
-print "foo="
-foo.show()
 print "x="
 x.show()
 print "P="
 P.show()
 print "F="
 F.show()
+Ft = F.transpose()
+print "Ft="
+Ft.show()
 print "H="
 H.show()
+Ht = H.transpose()
+print "Ht="
+Ht.show()
 print "R="
 R.show()
 print "I="
 I.show()
+
+
+foo = H * x
+print "H * x="
+foo.show()
+
+foo = F * P
+print "F * P="
+foo.show()
+foo2 = foo * Ft
+print "F * P * Ft="
+foo2.show()
+
+
 
 ###### DO NOT MODIFY ANYTHING HERE #######
 
