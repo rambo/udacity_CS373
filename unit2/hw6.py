@@ -196,9 +196,12 @@ u = matrix([[0.], [0.], [0.], [0.]]) # external motion
 
 
 
+# The problem here probably is the H but...
 P =  matrix([[0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0],[0.0,0.0,1000.0,1000.0],[0.0,0.0,1000.0,1000.0]]) # initial uncertainty
-F =  matrix([[1.0,0.0,dt,0.0],[0.0,1.0,0.0,dt],[0.0,0.0,1.0,0.0],[0.0,0.0,0.0,1.0]]) # next state function
 H =  matrix([[1.0,1.0,0.0,0.0],[1.0,1.0,0.0,0.0]]) # measurement function
+
+# These 3 should be OK AFAIUnderstand
+F =  matrix([[1.0,0.0,dt,0.0],[0.0,1.0,0.0,dt],[0.0,0.0,1.0,0.0],[0.0,0.0,0.0,1.0]]) # next state function
 R =  matrix([[0.1,0.0],[0.0,0.1]]) # measurement uncertainty
 I =  matrix([[0.0]])
 I.identity(F.dimx) # identity matrix
