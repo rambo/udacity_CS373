@@ -148,16 +148,16 @@ def filter(x, P):
     Ht = H.transpose()
 
     # DEBUGS, remove
-#    print 'F= '
-#    F.show()
-#    print 'H= '
-#    H.show()
-#    print 'Ft= '
-#    Ft.show()
-#    print 'Ht= '
-#    Ht.show()
-#    print 'I= '
-#    I.show()
+    print 'F= '
+    F.show()
+    print 'H= '
+    H.show()
+    print 'Ft= '
+    Ft.show()
+    print 'Ht= '
+    Ht.show()
+    print 'I= '
+    I.show()
 
     for n in range(len(measurements)):
         
@@ -169,15 +169,15 @@ def filter(x, P):
         K = P * Ht * S.inverse()
 
         # DEBUGS, remove
-#        print "measurement intermediates"
-#        print 'z= '
-#        z.show()
-#        print 'y= '
-#        y.show()
-#        print 'S= '
-#        S.show()
-#        print 'K= '
-#        K.show()
+        print "measurement intermediates"
+        print 'z= '
+        z.show()
+        print 'y= '
+        y.show()
+        print 'S= '
+        S.show()
+        print 'K= '
+        K.show()
 #        print "K dimensions: %d,%d" % (K.dimx, K.dimy)
 #        print "y dimensions: %d,%d" % (y.dimx, y.dimy)
 
@@ -196,7 +196,7 @@ def filter(x, P):
         x = F * x
         P = F * P * Ft
         
-#        print "After prediction" # Comment out this line
+        print "After prediction" # Comment out this line
         print 'x= '
         x.show()
         print 'P= '

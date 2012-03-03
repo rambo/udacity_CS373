@@ -157,11 +157,11 @@ def filter(x, P):
         P = (I - (K * H)) * P
 
         # DEBUGS, remove
-        print "After measurement"
-        print 'x= '
-        x.show()
-        print 'P= '
-        P.show()
+#        print "After measurement"
+#        print 'x= '
+#        x.show()
+#        print 'P= '
+#        P.show()
 
     
     print 'x= '
@@ -195,54 +195,51 @@ u = matrix([[0.], [0.], [0.], [0.]]) # external motion
 # R "has 0.1 as the main diagonal as the measurement noise"
 
 # These might help me understand
-# http://www.udacity-forums.com/cs373/questions/10153/what-are-all-those-matrices-for-the-kalman-filter-part-i-x-f-p-h-r-u
+# http://www.udacity-forums.comm/cs373/questions/10153/what-are-all-those-matrices-for-the-kalman-filter-part-i-x-f-p-h-r-u
 # http://www.udacity-forums.com/cs373/questions/10818/ive-programmed-kalman-matrices-still-dont-understand-them
 
-# The problem here probably is the H but...
-P =  matrix([[0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0],[0.0,0.0,1000.0,1000.0],[0.0,0.0,1000.0,1000.0]]) # initial uncertainty
-H =  matrix([[1.0,1.0,0.0,0.0],[1.0,1.0,0.0,0.0]]) # measurement function
-
-# These 3 should be OK AFAIUnderstand
+P =  matrix([[0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0],[0.0,0.0,1000.0,0.0],[0.0,0.0,0.0,1000.0]]) # initial uncertainty
+H =  matrix([[1.0,0.0,0.0,0.0],[0.0,1.0,0.0,0.0]]) # measurement function
 F =  matrix([[1.0,0.0,dt,0.0],[0.0,1.0,0.0,dt],[0.0,0.0,1.0,0.0],[0.0,0.0,0.0,1.0]]) # next state function
 R =  matrix([[0.1,0.0],[0.0,0.1]]) # measurement uncertainty
 I =  matrix([[0.0]])
 I.identity(F.dimx) # identity matrix
 
 ## DEBUGS, remember to remove!!
-print "x="
-x.show()
-print "P="
-P.show()
-print "F="
-F.show()
-Ft = F.transpose()
-print "Ft="
-Ft.show()
-print "H="
-H.show()
-Ht = H.transpose()
-print "Ht="
-Ht.show()
-print "R="
-R.show()
-print "I="
-I.show()
-
-foo = F * x
-print "F * x="
-foo.show()
-
-
-foo = H * x
-print "H * x="
-foo.show()
-
-foo = F * P
-print "F * P="
-foo.show()
-foo2 = foo * Ft
-print "F * P * Ft="
-foo2.show()
+#print "x="
+#x.show()
+#print "P="
+#P.show()
+#print "F="
+#F.show()
+#Ft = F.transpose()
+#print "Ft="
+#Ft.show()
+#print "H="
+#H.show()
+#Ht = H.transpose()
+#print "Ht="
+#Ht.show()
+#print "R="
+#R.show()
+#print "I="
+#I.show()
+#
+#foo = F * x
+#print "F * x="
+#foo.show()
+#
+#
+#foo = H * x
+#print "H * x="
+#foo.show()
+#
+#foo = F * P
+#print "F * P="
+#foo.show()
+#foo2 = foo * Ft
+#print "F * P * Ft="
+#foo2.show()
 
 
 
