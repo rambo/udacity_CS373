@@ -194,7 +194,9 @@ u = matrix([[0.], [0.], [0.], [0.]]) # external motion
 # H matrix that is a projection matrix from 4 dimensions to two dimensions (we can only observer x & y, not velocities)
 # R "has 0.1 as the main diagonal as the measurement noise"
 
-
+# These might help me understand
+# http://www.udacity-forums.com/cs373/questions/10153/what-are-all-those-matrices-for-the-kalman-filter-part-i-x-f-p-h-r-u
+# http://www.udacity-forums.com/cs373/questions/10818/ive-programmed-kalman-matrices-still-dont-understand-them
 
 # The problem here probably is the H but...
 P =  matrix([[0.0,0.0,0.0,0.0],[0.0,0.0,0.0,0.0],[0.0,0.0,1000.0,1000.0],[0.0,0.0,1000.0,1000.0]]) # initial uncertainty
