@@ -132,7 +132,9 @@ for i in range(N):
 p = p2
 
 w = []
-#insert code here!
+for i in range(N):
+    w.append(p2[i].measurement_prob(Z))
+
 print w #Please print w for grading purposes.
 
 
