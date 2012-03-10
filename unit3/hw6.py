@@ -149,7 +149,7 @@ class robot:
         L = self.length
         beta = d/L * tan(alpha) # Turning angle
         
-        # NOTE: This does not account for noise (which for this assignment is initialized as zero)
+        # NOTE: This does not account for noise yet !!
         if (beta < 0.001):
             # Straight motion
             new_x = self.x + (d * cos(theta))
@@ -167,6 +167,8 @@ class robot:
         
         result = robot(self.length)
         result.set(new_x, new_y, new_theta)
+        result.set_noise(self.bearing_noise, self.steering_noise, self.distance_noise)
+
         return result # make sure your move function returns an instance
                       # of the robot class with the correct coordinates.
 
@@ -181,9 +183,9 @@ class robot:
     # according to
     #           self.bearing_noise
 
-    def sense(self): #do not change the name of this function
+    def sense(self, add_noise=1):
         Z = []
-        # NOTE: This does not account for noise!
+        # NOTE: This does not account for noise!!!
         for i in range(len(landmarks)):
             # NOTE: Landmark coordinates are given in (y, x) form and NOT
             # in the traditional (x, y) format!
