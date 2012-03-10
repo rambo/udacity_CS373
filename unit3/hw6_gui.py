@@ -206,7 +206,7 @@ class DisplayParticles(Canvas):
 
 if __name__ == "__main__":
     #motions  ( here copy of the dataset in hw3-6 )
-    number_of_iterations = 20
+    number_of_iterations = 30
     motions = [[2. * pi / 20, 12.] for row in range(number_of_iterations)]
 
     #Display window
