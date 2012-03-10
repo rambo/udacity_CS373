@@ -137,3 +137,19 @@ for i in range(N):
 
 p3 = []
 
+
+sw = sum(w)
+W = [] # normalized weights
+for i in range(len(w)):
+    W.append(w[i]/sw) 
+
+#print p
+# This must be one of the most inefficient ways of doing this...
+while (len(p3)<len(p)):
+    for i in range(len(p)):
+        if random.random() < W[i]:
+            p3.append(p[i])
+
+#print p3
+
+    
