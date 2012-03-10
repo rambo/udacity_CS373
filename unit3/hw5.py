@@ -96,7 +96,7 @@ class robot:
     
     def sense(self): #do not change the name of this function
         Z = []
-
+        # NOTE: This does not account for noise!
         for i in range(len(landmarks)):
             # NOTE: Landmark coordinates are given in (y, x) form and NOT
             # in the traditional (x, y) format!

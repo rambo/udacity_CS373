@@ -140,6 +140,38 @@ class robot:
     #           self.steering_noise
     #           self.distance_noise
 
+    def move(self, motion): # Do not change the name of this function
+
+        # Initialize to same variable names as in video
+        alpha = motion[0] # Steering angle
+        theta = self.orientation
+        d = motion[1]
+        L = self.length
+        beta = d/L * tan(alpha) # Turning angle
+        
+        # NOTE: This does not account for noise (which for this assignment is initialized as zero)
+        if (beta < 0.001):
+            # Straight motion
+            new_x = self.x + (d * cos(theta))
+            new_y = self.y + (d * sin(theta))
+            new_theta = (theta + beta) % (2*pi)
+        else:
+            R = d/beta # Turning radius
+            cx = self.x - (sin(theta) * R)
+            cy = self.y + (cos(theta) * R)
+            new_x = cx + (sin(theta+beta) * R)
+            new_y = cy - (cos(theta+beta) * R)
+            new_theta = (theta+beta) % (2*pi)
+            #print "theta=%f, beta=%f, new_theta=%f" % (theta, beta, new_theta)
+        
+        
+        result = robot(self.length)
+        result.set(new_x, new_y, new_theta)
+        return result # make sure your move function returns an instance
+                      # of the robot class with the correct coordinates.
+
+
+
     # --------
     # sense: 
     #    
@@ -148,6 +180,23 @@ class robot:
     # and modify it so that it simulates bearing noise
     # according to
     #           self.bearing_noise
+
+    def sense(self): #do not change the name of this function
+        Z = []
+        # NOTE: This does not account for noise!
+        for i in range(len(landmarks)):
+            # NOTE: Landmark coordinates are given in (y, x) form and NOT
+            # in the traditional (x, y) format!
+            lx = landmarks[i][1]
+            ly = landmarks[i][0]
+            dx = self.x - lx
+            dy = self.y - ly
+            atan_result = atan2(dy,dx) + pi
+
+            Z.append(atan_result - self.orientation)
+
+        return Z #Leave this line here. Return vector Z of 4 bearings.
+
 
     ############## ONLY ADD/MODIFY CODE ABOVE HERE ####################
 
