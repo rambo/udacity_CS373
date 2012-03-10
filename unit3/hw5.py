@@ -102,13 +102,10 @@ class robot:
             # in the traditional (x, y) format!
             lx = landmarks[i][1]
             ly = landmarks[i][0]
-            print "landmark[%d] in %f,%f robot in %f,%f" % (i, lx, ly, self.x, self.y)
             dx = self.x - lx
             dy = self.y - ly
-#            dx = lx - self.x
-#            dy = ly - self.y
-            print "  dx=%f, dy=%f, atan2(dy,dx)=%f, robot.orientation=%f" % (dx,dy,atan2(dy,dx),self.orientation)
-            Z.append(atan2(dy,dx) - self.orientation)
+            # atan2 gives -pi to pi, assigment expects 0 to 2pi
+            Z.append((atan2(dy,dx)+pi) - self.orientation)
 
         return Z #Leave this line here. Return vector Z of 4 bearings.
     
