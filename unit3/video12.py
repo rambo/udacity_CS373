@@ -127,4 +127,11 @@ p = []
 for i in range(N):
     p.append(robot())
 
-print len(p)
+# Now we want to simulate robot
+# motion with our particles.
+# Each particle should turn by 0.1
+# and then move by 5. 
+for i in range(len(p)):
+    p[i] = p[i].move(0.1, 5.0)
+
+print p #PLEASE LEAVE THIS HERE FOR GRADING PURPOSES
