@@ -148,8 +148,7 @@ class robot:
         d = motion[1] + random.gauss(0.0, self.distance_noise) # Distance (with noise added)
         L = self.length
         beta = d/L * tan(alpha) # Turning angle
-        
-        # NOTE: This does not account for noise yet !!
+
         if (beta < 0.001):
             # Straight motion
             new_x = self.x + (d * cos(theta))
@@ -185,7 +184,6 @@ class robot:
 
     def sense(self, add_noise=1):
         Z = []
-        # NOTE: This does not account for noise!!!
         for i in range(len(landmarks)):
             # NOTE: Landmark coordinates are given in (y, x) form and NOT
             # in the traditional (x, y) format!
