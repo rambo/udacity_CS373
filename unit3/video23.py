@@ -112,7 +112,7 @@ def eval(r, p):
 myrobot = robot()
 myrobot = myrobot.move(0.1, 5.0)
 Z = myrobot.sense()
-N = 1000
+N = 1
 T = 10 #Leave this as 10 for grading purposes.
 
 p = []
