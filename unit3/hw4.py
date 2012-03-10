@@ -96,8 +96,30 @@ class robot:
     
     def move(self, motion): # Do not change the name of this function
 
-        # ADD CODE HERE
+        # Initialize to same variable names as in video
+        alpha = motion[0] # Steering angle
+        theta = self.orientation
+        d = motion[1]
+        L = self.length
+        beta = d/L * tan(alpha) # Turning angle
         
+        # NOTE: This does not account for noise (which for this assignment is initialized as zero)
+        if (beta < 0.001):
+            # Straight motion
+            new_x = self.x + (d * cos(theta))
+            new_y = self.y + (d * sin(theta))
+            new_theta = (theta + beta) % 2*pi #NOTE: Video does not have "% 2*pi" but there might be a corner case where it actually matters
+        else:
+            R = d/beta # Turning radius
+            cx = self.x - (sin(theta) * R)
+            cy = self.y + (cos(theta) * R)
+            new_x = cx + (sin(theta+beta) * R)
+            new_y = cy - (cos(theta+beta) * R)
+            new_theta = (theta+beta) % (2*pi)
+        
+        
+        result = robot(self.length)
+        result.set(new_x, new_y, new_theta)
         return result # make sure your move function returns an instance
                       # of the robot class with the correct coordinates.
                       
@@ -119,25 +141,25 @@ class robot:
 ##       Robot:     [x=39.034 y=7.1270 orient=0.2886]
 ##
 ##
-##length = 20.
-##bearing_noise  = 0.0
-##steering_noise = 0.0
-##distance_noise = 0.0
-##
-##myrobot = robot(length)
-##myrobot.set(0.0, 0.0, 0.0)
-##myrobot.set_noise(bearing_noise, steering_noise, distance_noise)
-##
-##motions = [[0.0, 10.0], [pi / 6.0, 10], [0.0, 20.0]]
-##
-##T = len(motions)
-##
-##print 'Robot:    ', myrobot
-##for t in range(T):
-##    myrobot = myrobot.move(motions[t])
-##    print 'Robot:    ', myrobot
-##
-##
+length = 20.
+bearing_noise  = 0.0
+steering_noise = 0.0
+distance_noise = 0.0
+
+myrobot = robot(length)
+myrobot.set(0.0, 0.0, 0.0)
+myrobot.set_noise(bearing_noise, steering_noise, distance_noise)
+
+motions = [[0.0, 10.0], [pi / 6.0, 10], [0.0, 20.0]]
+
+T = len(motions)
+
+print 'Robot:    ', myrobot
+for t in range(T):
+    myrobot = myrobot.move(motions[t])
+    print 'Robot:    ', myrobot
+
+
 
 ## IMPORTANT: You may uncomment the test cases below to test your code.
 ## But when you submit this code, your test cases MUST be commented
