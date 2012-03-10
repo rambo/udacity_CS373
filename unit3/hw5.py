@@ -103,10 +103,10 @@ class robot:
             lx = landmarks[i][1]
             ly = landmarks[i][0]
             print "landmark[%d] in %f,%f robot in %f,%f" % (i, lx, ly, self.x, self.y)
-            dy = self.y - ly
             dx = self.x - lx
-#            dy = ly - self.y
+            dy = self.y - ly
 #            dx = lx - self.x
+#            dy = ly - self.y
             print "  dx=%f, dy=%f, atan2(dy,dx)=%f, robot.orientation=%f" % (dx,dy,atan2(dy,dx),self.orientation)
             Z.append(atan2(dy,dx) - self.orientation)
 
