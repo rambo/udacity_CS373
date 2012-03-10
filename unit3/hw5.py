@@ -105,6 +105,8 @@ class robot:
             print "landmark[%d] in %f,%f robot in %f,%f" % (i, lx, ly, self.x, self.y)
             dy = self.y - ly
             dx = self.x - lx
+#            dy = ly - self.y
+#            dx = lx - self.x
             print "  dx=%f, dy=%f, atan2(dy,dx)=%f, robot.orientation=%f" % (dx,dy,atan2(dy,dx),self.orientation)
             Z.append(atan2(dy,dx) - self.orientation)
 
@@ -139,6 +141,7 @@ myrobot.set_noise(bearing_noise, steering_noise, distance_noise)
 print 'Robot:        ', myrobot
 senses = myrobot.sense()
 print 'Measurements: ', senses
+print "Expected: [6.004885648174475, 3.7295952571373605, 1.9295669970654687, 0.8519663271732721]"
 
 
 ## IMPORTANT: You may uncomment the test cases below to test your code.
