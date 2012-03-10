@@ -108,7 +108,7 @@ class robot:
             # Straight motion
             new_x = self.x + (d * cos(theta))
             new_y = self.y + (d * sin(theta))
-            new_theta = (theta + beta) % 2*pi #NOTE: Video does not have "% 2*pi" but there might be a corner case where it actually matters
+            new_theta = (theta + beta) % (2*pi)
         else:
             R = d/beta # Turning radius
             cx = self.x - (sin(theta) * R)
@@ -116,6 +116,7 @@ class robot:
             new_x = cx + (sin(theta+beta) * R)
             new_y = cy - (cos(theta+beta) * R)
             new_theta = (theta+beta) % (2*pi)
+            #print "theta=%f, beta=%f, new_theta=%f" % (theta, beta, new_theta)
         
         
         result = robot(self.length)
