@@ -104,12 +104,7 @@ class robot:
             ly = landmarks[i][0]
             dx = self.x - lx
             dy = self.y - ly
-            # atan2 gives -pi to pi, assigment expects 0 to 2pi, so let's do a bit of scaling (I'm not 100% sure this is perfect either)
-            atan_result = atan2(dy,dx)
-            if atan_result < 0.0:
-                atan_result += 2*pi
-            else:
-                atan_result += pi
+            atan_result = atan2(dy,dx) + pi
 
             Z.append(atan_result - self.orientation)
 
@@ -144,7 +139,7 @@ myrobot.set_noise(bearing_noise, steering_noise, distance_noise)
 print 'Robot:        ', myrobot
 senses = myrobot.sense()
 print 'Measurements: ', senses
-print "Expected: [6.004885648174475, 3.7295952571373605, 1.9295669970654687, 0.8519663271732721]"
+print "Expected:      [6.004885648174475, 3.7295952571373605, 1.9295669970654687, 0.8519663271732721]"
 
 
 ## IMPORTANT: You may uncomment the test cases below to test your code.
@@ -157,18 +152,18 @@ print "Expected: [6.004885648174475, 3.7295952571373605, 1.9295669970654687, 0.8
 ## 2) The following code should print the list [5.376567117456516, 3.101276726419402, 1.3012484663475101, 0.22364779645531352]
 ##
 ##
-##length = 20.
-##bearing_noise  = 0.0
-##steering_noise = 0.0
-##distance_noise = 0.0
-##
-##myrobot = robot(length)
-##myrobot.set(30.0, 20.0, pi / 5.0)
-##myrobot.set_noise(bearing_noise, steering_noise, distance_noise)
-##
-##print 'Robot:        ', myrobot
-##print 'Measurements: ', myrobot.sense()
-##
+length = 20.
+bearing_noise  = 0.0
+steering_noise = 0.0
+distance_noise = 0.0
+
+myrobot = robot(length)
+myrobot.set(30.0, 20.0, pi / 5.0)
+myrobot.set_noise(bearing_noise, steering_noise, distance_noise)
+
+print 'Robot:        ', myrobot
+print 'Measurements: ', myrobot.sense()
+print "Expected       [5.376567117456516, 3.101276726419402, 1.3012484663475101, 0.22364779645531352]"
 
 
 ## IMPORTANT: You may uncomment the test cases below to test your code.
