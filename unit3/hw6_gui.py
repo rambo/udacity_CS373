@@ -210,5 +210,5 @@ if __name__ == "__main__":
     motions = [[2. * pi / 20, 12.] for row in range(number_of_iterations)]
 
     #Display window
-    wind = DispParticleFilter ( motions, 500, displayRealRobot = True, displayGhost = False )
+    wind = DispParticleFilter ( motions, 500, displayRealRobot = True, displayGhost = True )
     wind.mainloop()
