@@ -131,6 +131,31 @@ for i in range(N):
 
 p3 = []
 
+sw = sum(w)
+wmax = 0
+W = [] # normalized weights
+for i in range(len(w)):
+    wtmp = w[i]/sw
+    if wtmp > wmax:
+        wmax = wtmp
+    W.append(wtmp) 
+
+## The resampling wheel as I understood it
+# index = U[1...N]
+index = random.randint(0, len(p)-1)
+b = 0
+for i in range(len(p)):
+    # b <- b + U{0...2*wmax}
+    b = b + random.uniform(0, 2*wmax)
+    # the if windex < block thingy
+    while (W[index] < b):
+#        print "b=%f, index=%d" % (b, index)
+        b = b - W[index]
+        index = (index + 1) % N
+#        print "b=%f, index=%d" % (b, index)
+    p3.append(p[index])
+
+
 p = p3
 print p #please leave this print statement here for grading!
 
