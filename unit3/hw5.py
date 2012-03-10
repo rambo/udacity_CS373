@@ -104,8 +104,14 @@ class robot:
             ly = landmarks[i][0]
             dx = self.x - lx
             dy = self.y - ly
-            # atan2 gives -pi to pi, assigment expects 0 to 2pi
-            Z.append((atan2(dy,dx)+pi) - self.orientation)
+            # atan2 gives -pi to pi, assigment expects 0 to 2pi, so let's do a bit of scaling (I'm not 100% sure this is perfect either)
+            atan_result = atan2(dy,dx)
+            if atan_result < 0.0:
+                atan_result += 2*pi
+            else:
+                atan_result += pi
+
+            Z.append(atan_result - self.orientation)
 
         return Z #Leave this line here. Return vector Z of 4 bearings.
     
