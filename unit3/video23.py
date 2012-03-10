@@ -145,7 +145,8 @@ for t in range(T):
             index = (index + 1) % N
         p3.append(p[index])
     p = p3
-    #enter code here, make sure that you output 10 print statements.
+    # eval is a reserved word btw, not good form to use it as custom function name
+    print eval(myrobot, p)
  
 
 
