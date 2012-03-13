@@ -35,7 +35,7 @@ cost_step = 1 # the cost associated with moving from a cell to an adjacent one.
 # ----------------------------------------
 
 def optimum_policy():
-    values = [[[99, []] for row in range(len(grid[0]))] for col in range(len(grid))]
+    values = [[99 for row in range(len(grid[0]))] for col in range(len(grid))]
     policy = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
     closed = [[0 for row in range(len(grid[0]))] for col in range(len(grid))]
 
@@ -43,7 +43,7 @@ def optimum_policy():
     y = goal[1]
     closed[x][y] = 1
     f = 0
-    open = [[f, x, y,[]]]
+    open = [[f, x, y]]
     while (True):
         if len(open) == 0:
             break
@@ -54,15 +54,12 @@ def optimum_policy():
         y = next[2]
         f = next[0]
         closed[x][y] = 1
-        values[x][y] = [f, next[3]]
+        values[x][y] = f
 
         for i in range(len(delta)):
             f2 = f + cost_step
             x2 = x + delta[i][0]
             y2 = y + delta[i][1]
-            # Caching the full action map for each cell is not not optimal, so sue me
-            actions = next[3][:] # Create a copy by slicing
-            actions.append(i)
             if (   x2 < 0 # Skip values outside of the grid
                 or y2 < 0
                 or x2 > len(grid)-1
@@ -75,7 +72,8 @@ def optimum_policy():
             if (grid[x2][y2] == 1): #Occupied space, do not expand
                 #print "(%d,%d) is occupied" % (x2, y2)
                 continue
-            open.append([f2,x2,y2, actions])
+            policy[x2][y2] = delta_name[(i+2)%len(delta_name)] # The complement of the operation taken to reach the cell
+            open.append([f2,x2,y2])
 
     
     
