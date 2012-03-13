@@ -23,7 +23,7 @@ grid = [[0, 0, 1, 0, 0, 0],
         [0, 0, 0, 0, 1, 0]]
 
 init = [0, 0]
-goal = [len(grid[0])-1,len(grid)-1] # Make sure that the goal definition stays in the function.
+goal = [len(grid)-1, len(grid[0])-1] # Make sure that the goal definition stays in the function.
 
 delta = [[-1, 0 ], # go up
         [ 0, -1], # go left
@@ -69,11 +69,11 @@ def search():
         
         if (    x == goal[0]
             and y == goal[1]):
-            print "solution"
+            #print "solution"
             print next_check
             return next_check
 
-        checked[y][x] = 1
+        checked[x][y] = 1
 
         new_cost = g + cost
         for i in range(len(delta)):
@@ -81,25 +81,25 @@ def search():
             new_y = y + delta[i][1]
             if (   new_x < 0 # Skip values outside of the grid
                 or new_y < 0
-                or new_y > len(grid)-1
-                or new_x > len(grid[0])-1):
+                or new_x > len(grid)-1
+                or new_y > len(grid[0])-1):
                 #print "(%d,%d) is outside the grid" % (new_x, new_y)
                 continue
-            if (grid[new_y][new_x] == 1): #Occupied space, we cannot expand here
+            if (grid[new_x][new_y] == 1): #Occupied space, we cannot expand here
                 #print "(%d,%d) is occupied" % (new_x, new_y)
-                checked[new_y][new_x] = 1 # Mark it as checked while at it
+                checked[new_x][new_y] = 1 # Mark it as checked while at it
                 continue
-            if (checked[new_y][new_x]): # Already checked, do not expand here
+            if (checked[new_x][new_y]): # Already checked, do not expand here
                 #print "(%d,%d) is already checked" % (new_x, new_y)
                 continue
             to_check.append([new_cost,new_x,new_y])
-            expand_table[new_y][new_x] = expand_counter
+            expand_table[new_x][new_y] = expand_counter
             expand_counter += 1
         
-        print "Checked"
-        show_array(checked)
-        print "To check"
-        show_array(to_check)
+#        print "Checked"
+#        show_array(checked)
+#        print "To check"
+#        show_array(to_check)
 
 search()        
         
