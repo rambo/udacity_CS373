@@ -46,8 +46,7 @@ def search():
     y = init[1]
     g = 0
 
-    expand[x][y] = 0
-    expand_counter = 1
+    expand_counter = 0
 
     open = [[g, x, y]]
 
@@ -64,6 +63,9 @@ def search():
             x = next[1]
             y = next[2]
             g = next[0]
+
+            expand[x][y] = expand_counter + 0
+            expand_counter += 1
             
             if x == goal[0] and y == goal[1]:
                 found = True
@@ -80,11 +82,9 @@ def search():
                             open.append([g2, x2, y2])
                             closed[x2][y2] = 1
                             #print "setting expand[%d][%d]=%d " % (x2, y2, expand_counter)
-                            expand[x2][y2] = expand_counter + 0
-                            expand_counter += 1
-#                            for i in range(len(expand)):
-#                                print expand[i]
+    for i in range(len(expand)):
+        print expand[i]
     return expand #Leave this line for grading purposes!
 
 
-#search()
+search()
