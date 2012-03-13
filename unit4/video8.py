@@ -71,14 +71,16 @@ def search():
             return to_check[cost].pop(0)
     
     def check_and_expand(x,y, current_cost):
-        print "Checking %d,%d" % (x,y)
+        #print "Checking %d,%d" % (x,y)
         if (    y == goal[0]
             and x == goal[1]):
-                return [current_cost,x,y]
+                # They say they want cost,x,y but actually it's y,x
+                #return [current_cost,x,y]
+                return [current_cost,y,x]
         checked[y][x] = 1
 
-        print "Checked cells"
-        show_array(checked)
+        #print "Checked cells"
+        #show_array(checked)
         
         new_cost = current_cost + cost
         for i in range(len(delta)):
@@ -88,24 +90,24 @@ def search():
                 or new_y < 0
                 or new_y > len(grid)-1
                 or new_x > len(grid[0])-1):
-                print "(%d,%d) is outside the grid" % (new_x, new_y)
+                #print "(%d,%d) is outside the grid" % (new_x, new_y)
                 continue
             if (grid[new_y][new_x] == 1): #Occupied space, we cannot expand here
-                print "(%d,%d) is occupied" % (new_x, new_y)
+                #print "(%d,%d) is occupied" % (new_x, new_y)
                 checked[new_y][new_x] = 1 # Mark it as checked while at it
                 continue
             if (checked[new_y][new_x]): # Already checked, do not expand here
-                print "(%d,%d) is already checked" % (new_x, new_y)
+                #print "(%d,%d) is already checked" % (new_x, new_y)
                 continue
             if not to_check.has_key(new_cost):
                 to_check[new_cost] = []
             to_check[new_cost].append([new_x,new_y,new_cost])
-        show_tocheck()
+        #show_tocheck()
         return False
 
 
-    print "Grid"
-    show_array(grid)
+    #print "Grid"
+    #show_array(grid)
 
     initial_ret = check_and_expand(init[0], init[0], 0)
     if (initial_ret): # unlikely but possible case, we're already where we want to go
