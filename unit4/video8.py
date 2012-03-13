@@ -71,32 +71,31 @@ def search():
             return to_check[cost].pop(0)
     
     def check_and_expand(x,y, current_cost):
-        #print "Checking %d,%d" % (x,y)
-        if (    y == goal[0]
-            and x == goal[1]):
-                # They say they want cost,x,y but actually it's y,x
-                #return [current_cost,x,y]
-                return [current_cost,y,x]
-        checked[y][x] = 1
+        #print "Checking %d,%d (goal: %d,%d)" % (x,y,goal[0], goal[1])
+        if (    x == goal[0]
+            and y == goal[1]):
+                return [current_cost,x,y]
+                #return [current_cost,y,x]
+        checked[x][y] = 1
 
         #print "Checked cells"
         #show_array(checked)
         
         new_cost = current_cost + cost
         for i in range(len(delta)):
-            new_x = x + delta[i][1]
-            new_y = y + delta[i][0]
+            new_x = x + delta[i][0]
+            new_y = y + delta[i][1]
             if (   new_x < 0 # Skip values outside of the grid
                 or new_y < 0
-                or new_y > len(grid)-1
-                or new_x > len(grid[0])-1):
+                or new_x > len(grid)-1
+                or new_y > len(grid[0])-1):
                 #print "(%d,%d) is outside the grid" % (new_x, new_y)
                 continue
-            if (grid[new_y][new_x] == 1): #Occupied space, we cannot expand here
+            if (grid[new_x][new_y] == 1): #Occupied space, we cannot expand here
                 #print "(%d,%d) is occupied" % (new_x, new_y)
-                checked[new_y][new_x] = 1 # Mark it as checked while at it
+                checked[new_x][new_y] = 1 # Mark it as checked while at it
                 continue
-            if (checked[new_y][new_x]): # Already checked, do not expand here
+            if (checked[new_x][new_y]): # Already checked, do not expand here
                 #print "(%d,%d) is already checked" % (new_x, new_y)
                 continue
             if not to_check.has_key(new_cost):
