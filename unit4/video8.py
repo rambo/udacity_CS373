@@ -115,14 +115,16 @@ def search():
     while (True):
         clean_tocheck()
         if (len(to_check.keys()) == 0):
+            print 'fail'
             return 'fail' # Nothing more to expand and we did not reach goal, this is a failure
         next_check = get_next_check()
         res = check_and_expand(next_check[0], next_check[1], next_check[2])
         if (res): # Solution found
+            print res
             return res
 
 
-print search()        
+search()        
         
         
     
