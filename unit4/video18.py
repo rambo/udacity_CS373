@@ -18,6 +18,28 @@ grid = [[0, 1, 0, 0, 0, 0],
         [0, 1, 0, 0, 0, 0],
         [0, 0, 0, 0, 1, 0]]
 
+# another test grid
+grid = [[0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 1, 0],
+        [0, 0, 1, 0, 1, 0],
+        [0, 0, 1, 0, 1, 0]]
+
+
+# yet another test grid
+grid = [[0, 0, 1, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0],
+        [0, 0, 1, 1, 1, 0],
+        [0, 0, 0, 0, 1, 0]]
+
+grid = [[0, 0, 1, 0, 0, 0],
+        [0, 0, 1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0],
+        [1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 1, 0]]
+
+
 init = [0, 0]
 goal = [len(grid)-1, len(grid[0])-1]
 
@@ -42,6 +64,7 @@ def optimum_policy():
     x = goal[0]
     y = goal[1]
     closed[x][y] = 1
+    policy[x][y] = '*'
     f = 0
     open = [[f, x, y]]
     while (True):
@@ -78,8 +101,8 @@ def optimum_policy():
     
     
 
-    for i in range(len(values)):
-        print values[i]
+#    for i in range(len(values)):
+#        print values[i]
 
     for i in range(len(policy)):
         print policy[i]
