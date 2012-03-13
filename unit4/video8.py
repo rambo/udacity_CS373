@@ -39,7 +39,7 @@ def search():
     # insert code here and make sure it returns the appropriate result
     # ----------------------------------------
 
-    # Initialize our checked matrix (not this as the grid is in y,x format)
+    # Initialize our checked matrix (note this as the grid is in y,x format)
     # checked = [[0] * len(grid[0])] * len(grid) # arghs, this will create references...
     checked = []
     for i in range(len(grid)):
