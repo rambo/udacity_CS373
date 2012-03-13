@@ -35,32 +35,57 @@ cost_step = 1 # the cost associated with moving from a cell to an adjacent one.
 # ----------------------------------------
 
 def optimum_policy():
-    value = [[99 for row in range(len(grid[0]))] for col in range(len(grid))]
-    change = True
+    values = [[[99, []] for row in range(len(grid[0]))] for col in range(len(grid))]
+    policy = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
+    closed = [[0 for row in range(len(grid[0]))] for col in range(len(grid))]
 
-    while change:
-        change = False
+    x = goal[0]
+    y = goal[1]
+    closed[x][y] = 1
+    f = 0
+    open = [[f, x, y,[]]]
+    while (True):
+        if len(open) == 0:
+            break
+        
+        #open.sort() # not needed for this algo, we evaluate every cell
+        next = open.pop(0) # we can pop the zeroeth element, no need to reverse
+        x = next[1]
+        y = next[2]
+        f = next[0]
+        closed[x][y] = 1
+        values[x][y] = [f, next[3]]
 
-        for x in range(len(grid)):
-            for y in range(len(grid[0])):
-                if goal[0] == x and goal[1] == y:
-                    if value[x][y] > 0:
-                        value[x][y] = 0
+        for i in range(len(delta)):
+            f2 = f + cost_step
+            x2 = x + delta[i][0]
+            y2 = y + delta[i][1]
+            # Caching the full action map for each cell is not not optimal, so sue me
+            actions = next[3][:] # Create a copy by slicing
+            actions.append(i)
+            if (   x2 < 0 # Skip values outside of the grid
+                or y2 < 0
+                or x2 > len(grid)-1
+                or y2 > len(grid[0])-1):
+                #print "(%d,%d) is outside the grid" % (x2, y2)
+                continue
+            if (closed[x2][y2] == 1): #Already checked
+                #print "(%d,%d) is already checked" % (x2, y2)
+                continue
+            if (grid[x2][y2] == 1): #Occupied space, do not expand
+                #print "(%d,%d) is occupied" % (x2, y2)
+                continue
+            open.append([f2,x2,y2, actions])
 
-                        change = True
+    
+    
 
-                elif grid[x][y] == 0:
-                    for a in range(len(delta)):
-                        x2 = x + delta[a][0]
-                        y2 = y + delta[a][1]
+    for i in range(len(values)):
+        print values[i]
 
-                        if x2 >= 0 and x2 < len(grid) and y2 >= 0 and y2 < len(grid[0]) and grid[x2][y2] == 0:
-                            v2 = value[x2][y2] + cost_step
-
-                            if v2 < value[x][y]:
-                                change = True
-                                value[x][y] = v2
+    for i in range(len(policy)):
+        print policy[i]
 
     return policy # Make sure your function returns the expected grid.
 
-
+optimum_policy()
