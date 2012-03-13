@@ -50,7 +50,7 @@ def search():
     y = init[1]
     g = 0
 
-    open = [[g, x, y]]
+    open = [[g, x, y, []]]
 
     found = False  # flag that is set when search is complet
     resign = False # flag set if we can't find expand
@@ -73,11 +73,28 @@ def search():
                 for i in range(len(delta)):
                     x2 = x + delta[i][0]
                     y2 = y + delta[i][1]
+                    actions = next[3][:] # Create a copy by slicing
+                    actions.append(i)
                     if x2 >= 0 and x2 < len(grid) and y2 >=0 and y2 < len(grid[0]):
                         if closed[x2][y2] == 0 and grid[x2][y2] == 0:
                             g2 = g + cost
-                            open.append([g2, x2, y2])
+                            open.append([g2, x2, y2, actions])
                             closed[x2][y2] = 1
-    for i in range(len(expand)):
-        print expand[i]
-    return # make sure you return the shortest path.
+    path = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))] # init empty path
+    path[x][y] = '*'
+    actions = next[3]
+    path_x = init[0]
+    path_y = init[1]
+    for i in range(len(actions)):
+        path[path_x][path_y] = delta_name[actions[i]]
+        path_x += delta[actions[i]][0]
+        path_y += delta[actions[i]][1]
+        
+    for i in range(len(path)):
+        print path[i]
+
+
+    return path# make sure you return the shortest path.
+
+
+search()
