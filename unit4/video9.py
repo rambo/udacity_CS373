@@ -58,8 +58,9 @@ def search():
             resign = True
         else:
             open.sort()
-            open.reverse()
-            next = open.pop()
+            next = open.pop(0) # we can pop the zeroeth element, no need to reverse
+#            open.reverse()
+#            next = open.pop()
             x = next[1]
             y = next[2]
             g = next[0]
