@@ -133,6 +133,11 @@ def optimum_policy2D():
         # Get next cheapest path to investigate
         expand_list.sort()
         next = expand_list.pop(0) # we can pop the zeroeth element, no need to reverse
+#        expand_list.sort(reverse=True)
+#        next = expand_list.pop() # we can pop the zeroeth element, no need to reverse
+#        expand_list.sort()
+#        expand_list.reverse()
+#        next = expand_list.pop() # we can pop the zeroeth element, no need to reverse
         g = next[0]
         p = next[1]
         actions_taken = next[2]
