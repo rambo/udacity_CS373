@@ -94,7 +94,7 @@ def print_3d_array(a):
         print "Dimension %d:" % i
         print_2d_array(a[i])
     
-
+# This is just to test my position class
 def test_drive(actions):
     drive_grid = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
     p = position(init[0], init[1], init[2])
@@ -139,7 +139,7 @@ def optimum_policy2D():
 
         if (    p.x == goal[0]
             and p.y == goal[1]):
-            print "solved"
+            #print "solved"
             break
         
         for a in action_name:
@@ -152,17 +152,17 @@ def optimum_policy2D():
                 or p2.y < 0
                 or p2.y >= len(grid[0])): # note the len is one too large that's why >=
                 # outside of grid
-                print "(%d,%d) is outside the grid" % (p2.x, p2.y)
+                #print "(%d,%d) is outside the grid" % (p2.x, p2.y)
                 continue
             
             if closed[p2.heading][p2.x][p2.y]:
                 # Already searched (in this dimension...)
-                print "(%d,%d,%d) is already searched" % (p2.x, p2.y, p2.heading)
+                #print "(%d,%d,%d) is already searched" % (p2.x, p2.y, p2.heading)
                 continue
             
             if grid[p2.x][p2.y]:
                 # Occupied
-                print "(%d,%d) is not navigable" % (p2.x, p2.y)
+                #print "(%d,%d) is not navigable" % (p2.x, p2.y)
                 continue
 
             g2 = g + cost[aidx]
@@ -171,11 +171,11 @@ def optimum_policy2D():
             expand_list.append([g2, p2, actions_taken2])
             closed[p.heading][p.x][p.y] = 1 # Mark this one as closed from further search
 
-        print "Expanded"
-        print_3d_array(expanded)
-        print "Closed"
-        print_3d_array(closed)
-        print "To be expanded: %s" % repr(expand_list)
+#        print "Expanded"
+#        print_3d_array(expanded)
+#        print "Closed"
+#        print_3d_array(closed)
+#        print "To be expanded: %s" % repr(expand_list)
 
     # If we get this far we're good
     path = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))] # init empty path
