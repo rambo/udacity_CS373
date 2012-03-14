@@ -70,6 +70,9 @@ class position:
 
     def move(self, action_idx):
         """Calculate new position when given an index from the action array"""
+        if (isinstance(action_idx, str)):
+            # If we got a string the map it via the action_name -list
+            action_idx = action_name.index(action_idx)
         action_val = action[action_idx]
         # Get the correct dimension vector based on current heading and action modifier
         move_val = forward[(self.heading + action_val) % len(forward)]
@@ -83,16 +86,15 @@ def print_2d_array(a):
     for i in range(len(a)):
         print a[i]
 
-def action_name2idx(aname):
-    return action_name.index(aname)
-
 def test_drive(actions):
     drive_grid = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
     p = position(init[0], init[1], init[2])
     for a in actions:
-        action_idx = action_name2idx(a)
+        action_idx = action_name.index(a)
         drive_grid[p.x][p.y] = a
         p.move(action_idx)
+    drive_grid[p.x][p.y] = '*'
+    
     print_2d_array(drive_grid)
 
 test_drive(['#','L', 'R', '#', 'L', 'L', '#'])
