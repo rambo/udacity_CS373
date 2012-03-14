@@ -102,11 +102,13 @@ class robot:
             # in the traditional (x, y) format!
             lx = landmarks[i][1]
             ly = landmarks[i][0]
-            dx = self.x - lx
-            dy = self.y - ly
-            atan_result = atan2(dy,dx) + pi
+            dx = lx - self.x
+            dy = ly - self.y
+            atan_result = atan2(dy,dx)
+            bearing = atan_result - self.orientation
+            bearing %= 2.0 * pi # normalize to 0->2pi
 
-            Z.append(atan_result - self.orientation)
+            Z.append(bearing)
 
         return Z #Leave this line here. Return vector Z of 4 bearings.
     
@@ -152,18 +154,18 @@ class robot:
 ## 2) The following code should print the list [5.376567117456516, 3.101276726419402, 1.3012484663475101, 0.22364779645531352]
 ##
 ##
-##length = 20.
-##bearing_noise  = 0.0
-##steering_noise = 0.0
-##distance_noise = 0.0
-##
-##myrobot = robot(length)
-##myrobot.set(30.0, 20.0, pi / 5.0)
-##myrobot.set_noise(bearing_noise, steering_noise, distance_noise)
-##
-##print 'Robot:        ', myrobot
-##print 'Measurements: ', myrobot.sense()
-##print "Expected       [5.376567117456516, 3.101276726419402, 1.3012484663475101, 0.22364779645531352]"
+length = 20.
+bearing_noise  = 0.0
+steering_noise = 0.0
+distance_noise = 0.0
+
+myrobot = robot(length)
+myrobot.set(30.0, 20.0, pi / 5.0)
+myrobot.set_noise(bearing_noise, steering_noise, distance_noise)
+
+print 'Robot:        ', myrobot
+print 'Measurements: ', myrobot.sense()
+print "Expected       [5.376567117456516, 3.101276726419402, 1.3012484663475101, 0.22364779645531352]"
 
 
 ## IMPORTANT: You may uncomment the test cases below to test your code.
