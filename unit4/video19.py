@@ -109,6 +109,8 @@ def test_drive(actions):
 #test_drive(['#','L', 'R', '#', 'L', 'L', '#'])
 
 def optimum_policy2D():
+    # NOTE: This implementation uses "naive" search (not A*) to solve the problem, but since in this case we did not actually need the more complex 3D policy map to solve the problem why bother (also: generating the A* heuristic and plugging it in here is not exactly rocket surgery)
+
     closed = [[[0 for row in range(len(grid[0]))] for col in range(len(grid))] for heading in range(len(forward))]
     expanded = [[[-1 for row in range(len(grid[0]))] for col in range(len(grid))] for heading in range(len(forward))]
     
