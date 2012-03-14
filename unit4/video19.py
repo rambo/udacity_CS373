@@ -58,12 +58,52 @@ action_name = ['R', '#', 'L']
 # modify code below
 # ----------------------------------------
 
+
+class position:
+    def __init__(self, x, y, heading):
+        self.x = x
+        self.y = y
+        self.heading = heading
+
+    def clone(self):
+        return position(self.x, self.y, self.heading)
+
+    def move(self, action_idx):
+        """Calculate new position when given an index from the action array"""
+        action_val = action[action_idx]
+        # Get the correct dimension vector based on current heading and action modifier
+        move_val = forward[(self.heading + action_val) % len(forward)]
+        # Calculate new x and y
+        self.x += move_val[0]
+        self.y += move_val[1]
+        # update the heading
+        self.heading = (self.heading + action_val) % len(forward)
+
+def print_2d_array(a):
+    for i in range(len(a)):
+        print a[i]
+
+def action_name2idx(aname):
+    return action_name.index(aname)
+
+def test_drive(actions):
+    drive_grid = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
+    p = position(init[0], init[1], init[2])
+    for a in actions:
+        action_idx = action_name2idx(a)
+        drive_grid[p.x][p.y] = a
+        p.move(action_idx)
+    print_2d_array(drive_grid)
+
+test_drive(['#','L', 'R', '#', 'L', 'L', '#'])
+
 def optimum_policy2D():
     closed = [[0 for row in range(len(grid[0]))] for col in range(len(grid))]
     closed[init[0]][init[1]] = 1
 
     x = init[0]
     y = init[1]
+    h = init[2]
     g = 0
 
     open = [[g, x, y, []]]
