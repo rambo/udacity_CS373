@@ -86,6 +86,12 @@ def print_2d_array(a):
     for i in range(len(a)):
         print a[i]
 
+def print_3d_array(a):
+    for i in range(len(a)):
+        print "Dimension %d:" % i
+        print_2d_array(a[i])
+    
+
 def test_drive(actions):
     drive_grid = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
     p = position(init[0], init[1], init[2])
@@ -100,7 +106,14 @@ def test_drive(actions):
 test_drive(['#','L', 'R', '#', 'L', 'L', '#'])
 
 def optimum_policy2D():
-    closed = [[0 for row in range(len(grid[0]))] for col in range(len(grid))]
+    closed = [[[0 for row in range(len(grid[0]))] for col in range(len(grid))] for heading in range(len(forward))]
+    
+    print_3d_array(closed)
+
+    return 
+
+    
+
     closed[init[0]][init[1]] = 1
 
     x = init[0]
@@ -154,6 +167,6 @@ def optimum_policy2D():
 
     return policy2D # Make sure your function returns the expected grid.
 
-
+optimum_policy2D()
 
 
