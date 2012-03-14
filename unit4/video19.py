@@ -68,6 +68,9 @@ class position:
     def clone(self):
         return position(self.x, self.y, self.heading)
 
+    def __repr__(self):
+        return "[%d,%d,%d]" % (self.x, self.y, self.heading)
+
     def move(self, action_idx):
         """Calculate new position when given an index from the action array"""
         if (isinstance(action_idx, str)):
@@ -103,69 +106,89 @@ def test_drive(actions):
     
     print_2d_array(drive_grid)
 
-test_drive(['#','L', 'R', '#', 'L', 'L', '#'])
+#test_drive(['#','L', 'R', '#', 'L', 'L', '#'])
 
 def optimum_policy2D():
     closed = [[[0 for row in range(len(grid[0]))] for col in range(len(grid))] for heading in range(len(forward))]
+    expanded = [[[-1 for row in range(len(grid[0]))] for col in range(len(grid))] for heading in range(len(forward))]
     
-    print_3d_array(closed)
+    #print_3d_array(closed)
 
-    return 
 
-    
+    expand_counter = 0
+    p = position(init[0], init[1], init[2])
+    g = 0 # initial cost
+    # Close the starting position
+    closed[p.heading][p.x][p.y] = 1
+    # The list contains cost, position object and a list of actions taken so far
+    expand_list = [[g, p, []]]
 
-    closed[init[0]][init[1]] = 1
-
-    x = init[0]
-    y = init[1]
-    h = init[2]
-    g = 0
-
-    open = [[g, x, y, []]]
-
-    found = False  # flag that is set when search is complet
-    resign = False # flag set if we can't find expand
-
-    while not found and not resign:
-        if len(open) == 0:
-            resign = True
+    while (True):
+        if len(expand_list) == 0:
+            print 'fail'
             return 'fail'
-        else:
-            open.sort()
-            next = open.pop(0) # we can pop the zeroeth element, no need to reverse
-#            open.reverse()
-#            next = open.pop()
-            x = next[1]
-            y = next[2]
-            g = next[0]
-            
-            if x == goal[0] and y == goal[1]:
-                found = True
-            else:
-                for i in range(len(delta)):
-                    x2 = x + delta[i][0]
-                    y2 = y + delta[i][1]
-                    actions = next[3][:] # Create a copy by slicing
-                    actions.append(i)
-                    if x2 >= 0 and x2 < len(grid) and y2 >=0 and y2 < len(grid[0]):
-                        if closed[x2][y2] == 0 and grid[x2][y2] == 0:
-                            g2 = g + cost
-                            open.append([g2, x2, y2, actions])
-                            closed[x2][y2] = 1
-    path = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))] # init empty path
-    path[x][y] = '*'
-    actions = next[3]
-    path_x = init[0]
-    path_y = init[1]
-    for i in range(len(actions)):
-        path[path_x][path_y] = delta_name[actions[i]]
-        path_x += delta[actions[i]][0]
-        path_y += delta[actions[i]][1]
         
-    for i in range(len(path)):
-        print path[i]
+        # Get next cheapest path to investigate
+        expand_list.sort()
+        next = expand_list.pop(0) # we can pop the zeroeth element, no need to reverse
+        g = next[0]
+        p = next[1]
+        actions_taken = next[2]
+        expanded[p.heading][p.x][p.y] = expand_counter
+        expand_counter += 1
 
-    return policy2D # Make sure your function returns the expected grid.
+        if (    p.x == goal[0]
+            and p.y == goal[1]):
+            print "solved"
+            break
+        
+        for a in action_name:
+            aidx = action_name.index(a)
+            p2 = p.clone()
+            p2.move(aidx)
+
+            if (   p2.x < 0
+                or p2.x >= len(grid) # note the len is one too large that's why >=
+                or p2.y < 0
+                or p2.y >= len(grid[0])): # note the len is one too large that's why >=
+                # outside of grid
+                print "(%d,%d) is outside the grid" % (p2.x, p2.y)
+                continue
+            
+            if closed[p2.heading][p2.x][p2.y]:
+                # Already searched (in this dimension...)
+                print "(%d,%d,%d) is already searched" % (p2.x, p2.y, p2.heading)
+                continue
+            
+            if grid[p2.x][p2.y]:
+                # Occupied
+                print "(%d,%d) is not navigable" % (p2.x, p2.y)
+                continue
+
+            g2 = g + cost[aidx]
+            actions_taken2 = actions_taken[:] # Clone the list by slicing
+            actions_taken2.append(a)
+            expand_list.append([g2, p2, actions_taken2])
+            closed[p.heading][p.x][p.y] = 1 # Mark this one as closed from further search
+
+        print "Expanded"
+        print_3d_array(expanded)
+        print "Closed"
+        print_3d_array(closed)
+        print "To be expanded: %s" % repr(expand_list)
+
+    # If we get this far we're good
+    path = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))] # init empty path
+    path_p = position(init[0],init[1],init[2])
+    for a in actions_taken:
+        path[path_p.x][path_p.y] = a
+        path_p.move(a)
+    path[path_p.x][path_p.y] = '*'
+
+
+    print_2d_array(path)
+
+    return path # Make sure your function returns the expected grid.
 
 optimum_policy2D()
 
