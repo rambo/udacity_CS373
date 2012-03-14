@@ -104,7 +104,7 @@ class robot:
         beta = d/L * tan(alpha) # Turning angle
         
         # NOTE: This does not account for noise (which for this assignment is initialized as zero)
-        if (beta < 0.001):
+        if (abs(beta) < 0.001):
             # Straight motion
             new_x = self.x + (d * cos(theta))
             new_y = self.y + (d * sin(theta))
