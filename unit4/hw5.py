@@ -163,12 +163,3 @@ def stochastic_value():
 
     
     return value, policy
-
-sp = stochastic_value()
-print "Values"
-print_2d_array(sp[0])
-print "Policy"
-print_2d_array(sp[1])
-
-# Making sure my last line is not a comment (call me superstitious)
-True
