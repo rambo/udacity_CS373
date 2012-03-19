@@ -46,6 +46,7 @@ def print_3d_array(a):
 
 def optimum_policy():
     value = [[99 for row in range(len(grid[0]))] for col in range(len(grid))]
+    policy = False
     change = True
 
     while change:
@@ -75,4 +76,4 @@ def optimum_policy():
 
     return policy # Make sure your function returns the expected grid.
 
-
+optimum_policy()
