@@ -96,6 +96,7 @@ def stochastic_value():
                     and value[x][y] > 0): 
                     #Goal, set value to zero if nonzero
                     value[x][y] = 0
+                    policy[x][y] = '*'
                     cell_changed = True
                     continue
                         
@@ -115,7 +116,7 @@ def stochastic_value():
                         #print "(%d,%d) is outside the grid" % (x2, y2)
                         continue
 
-                    if (grid[x2][y2] == 1): #Occupied space, do not expand
+                    if (grid[x2][y2] == 1): #Occupied space, skip
                         #print "(%d,%d) is occupied" % (x2, y2)
                         continue
 
@@ -123,11 +124,16 @@ def stochastic_value():
                     if v2 < value[x][y]: # Update cost if cheaper than previous
                         cell_changed = True
                         value[x][y] = v2
+                        policy[x][y] = delta_name[a]
 
     
     return value, policy
 
+sp = stochastic_value()
 print "Values"
-print_2d_array(stochastic_value()[0])
+print_2d_array(sp[0])
 print "Policy"
-print_2d_array(stochastic_value()[1])
+print_2d_array(sp[1])
+
+# Making sure my last line is not a comment (call me superstitious)
+True
