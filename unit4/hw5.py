@@ -52,6 +52,11 @@ grid = [[0, 0, 0, 0],
 grid = [[0, 0, 0],
         [0, 0, 0]]
 
+# Second test grid from video
+grid = [[0, 1, 0],
+        [0, 0, 0]]
+
+
 
        
 goal = [0, len(grid[0])-1] # Goal is in top right corner
