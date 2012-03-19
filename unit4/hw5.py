@@ -47,6 +47,12 @@ grid = [[0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 1, 1, 0]]
+
+# First test grid from video
+grid = [[0, 0, 0],
+        [0, 0, 0]]
+
+
        
 goal = [0, len(grid[0])-1] # Goal is in top right corner
 
@@ -76,6 +82,29 @@ cost_step = 1
 def print_2d_array(a):
     for i in range(len(a)):
         print a[i]
+
+def get_veer_value(x, y, a, mod, values):
+    delta_veer = delta[(a+mod)%len(delta)]
+    x2 = x + delta_veer[0]
+    y2 = y + delta_veer[1]
+
+    if not is_inside_grid(x2,y2):
+        #print "(%d,%d) is outside the grid" % (x2, y2)
+        return collision_cost
+    
+    if (grid[x2][y2] == 1): #Occupied space
+        #print "(%d,%d) is occupied" % (x2, y2)
+        return collision_cost
+
+    return values[x2][y2]
+
+def is_inside_grid(x2,y2):
+    if (   x2 < 0 
+        or y2 < 0
+        or x2 > len(grid)-1
+        or y2 > len(grid[0])-1):
+        return False
+    return True
 
 def stochastic_value():
     value = [[1000 for row in range(len(grid[0]))] for col in range(len(grid))]
@@ -109,10 +138,7 @@ def stochastic_value():
                     x2 = x + delta[a][0]
                     y2 = y + delta[a][1]
 
-                    if (   x2 < 0 # Skip values outside of the grid
-                        or y2 < 0
-                        or x2 > len(grid)-1
-                        or y2 > len(grid[0])-1):
+                    if not is_inside_grid(x2,y2):
                         #print "(%d,%d) is outside the grid" % (x2, y2)
                         continue
 
@@ -120,7 +146,13 @@ def stochastic_value():
                         #print "(%d,%d) is occupied" % (x2, y2)
                         continue
 
-                    v2 = value[x2][y2] + cost_step
+                    # Calculate stochastic cost
+                    # PONDER: Skip the checks above for the succesfull case and calculate *everything* based on the collision costs ?? (second thought though that might give wrong results)
+                    v2 = value[x2][y2] * success_prob # Start cost of successfull move
+                    v2 += get_veer_value(x, y, a, 1, value) * failure_prob # Add the cost of veering left (weighted by probability)
+                    v2 += get_veer_value(x, y, a, -1, value) * failure_prob # Same for veering right
+                    v2 += cost_step # And finally the normal cost step
+
                     if v2 < value[x][y]: # Update cost if cheaper than previous
                         cell_changed = True
                         value[x][y] = v2
