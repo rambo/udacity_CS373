@@ -180,10 +180,11 @@ xs = range(len(points_ok))
 
 import matplotlib
 import matplotlib.pyplot as plot
-plot.plot(xs, point_ok)
-plot.plot(xs, points_nop)
-plot.plot(xs, points_nod)
-plot.plot(xs, points_noi)
+plot.plot(xs, points_ok, label='ok')
+plot.plot(xs, points_nop, label='no p')
+plot.plot(xs, points_nod, label='no d')
+plot.plot(xs, points_noi, label='no i')
+plot.legend(loc='upper right')
 plot.show()
 
 
