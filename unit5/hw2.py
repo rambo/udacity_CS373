@@ -64,8 +64,6 @@ def smooth(path, weight_data = 0.1, weight_smooth = 0.1, tolerance = 0.00001):
         for j in range(len(path[0])):
             newpath[i][j] = path[i][j]
 
-
-    #### ENTER CODE BELOW THIS LINE ###
     alpha = weight_data
     beta = weight_smooth
     # Seems these tolerances are way too high...
@@ -253,10 +251,10 @@ answer2 = [[1.239080543767428, 0.5047204351187283],
 ##    [0.000, 1.000] -> [0.505, 1.239]
 ##    [1.000, 1.000] -> [0.908, 0.908]
 
-print "Test path 1"
-solution_check(smooth(testpath1), answer1)
-print "Test path 2"
-solution_check(smooth(testpath2), answer2)
+#print "Test path 1"
+#solution_check(smooth(testpath1), answer1)
+#print "Test path 2"
+#solution_check(smooth(testpath2), answer2)
 
 
 
