@@ -70,6 +70,7 @@ def smooth(path, fix, weight_data = 0.0, weight_smooth = 0.1, tolerance = 0.0000
 
     alpha = weight_data
     beta = weight_smooth
+    gamma = 0.5 * weight_smooth
     # Seems these tolerances are way too high...
     #tolerance = 0.001 * (len(path)-2)
     tmppath = [[0 for row in range(len(path[0]))] for col in range(len(path))]
@@ -84,9 +85,14 @@ def smooth(path, fix, weight_data = 0.0, weight_smooth = 0.1, tolerance = 0.0000
                 tmptmp = newpath[i][j]
                 newpath[i][j] += weight_data * (path[i][j] - newpath[i][j])
                 newpath[i][j] += weight_smooth * (newpath[(i-1)%len(newpath)][j] + newpath[(i+1)%len(newpath)][j] - (2.0 * newpath[i][j]))
+                #total_change += abs(tmptmp -  newpath[i][j])
+
+                # The naive (as in not single update ["who cares"]) look-around equations
+                newpath[i][j] += gamma * ((2.0*newpath[(i-1)%len(newpath)][j]) - newpath[(i-2)%len(newpath)][j] - newpath[i][j])
+                newpath[i][j] += gamma * ((2.0*newpath[(i+1)%len(newpath)][j]) - newpath[(i+2)%len(newpath)][j] - newpath[i][j])
+
                 total_change += abs(tmptmp -  newpath[i][j])
-                
-                
+
 #                # Version doing it properly (from same URL)
 #                alpha_value = alpha * (path[i][j] - newpath[i][j])
 #                beta_value = beta * (newpath[(i+1)%len(newpath)][j] + newpath[(i-1)%len(newpath)][j] - 2 * newpath[i][j])
@@ -95,8 +101,8 @@ def smooth(path, fix, weight_data = 0.0, weight_smooth = 0.1, tolerance = 0.0000
 #                #print "alpha_value=%f beta_value=%f" % (alpha_value, beta_value)
 #
 #                total_change += abs(alpha_value+beta_value) # This produces a value approaching zero
-            
-        newpath = tmppath
+#
+#        newpath = tmppath
 
         #print "total_change %f (tolerance %f)" % (total_change, tolerance)
         if (   total_change < tolerance # Good enough
@@ -105,6 +111,9 @@ def smooth(path, fix, weight_data = 0.0, weight_smooth = 0.1, tolerance = 0.0000
         
         last_total_change = total_change
 
+    # DEBUG: remove
+    for i in range(len(path)):
+        print '['+ ', '.join('%.3f'%x for x in path[i]) +'] -> ['+ ', '.join('%.3f'%x for x in newpath[i]) +']'
 
     return newpath
 
