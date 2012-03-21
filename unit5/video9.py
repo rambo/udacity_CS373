@@ -147,6 +147,6 @@ def run(param):
     for step in range(N):
         steering = steering = -tau * myrobot.y #(crosstrack error is the plain y in this case)
         myrobot = myrobot.move(steering, speed)
-        print myrobot
+        print myrobot, steering
 
 run(0.1) # call function with parameter tau of 0.1 and print results
