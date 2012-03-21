@@ -160,12 +160,36 @@ def run(params):
             
 def twiddle(tol = 0.1):
 
-    # -------------
-    # Add code here
-    # -------------
+    params = [0.0, 0.0, 0.0] # P D and I
+    bumps = [1.0, 1.0, 1.0]
+    n = 0
     
-    return error # Your function only needs to return the computed error
-                 # from runs 100-200.
+    best_error = run(params)
+    while sum(bumps) > tol:
+        n += 1
+        #print "Twiddle #%d, best_error=%s, sum(bumps)=%s" % (n, best_error, sum(bumps))
+        for i in range(len(params)):
+            params[i] += bumps[i]
+            error = run(params)
+            if error < best_error:
+                best_error = error
+                bumps[i] *= 1.1
+            else:
+                params[i] -= 2*bumps[i]
+                error = run(params)
+                if error < best_error:
+                    best_error = error
+                    bumps[i] *= 1.1
+                else:
+                    params[i] += bumps[i]
+                    bumps[i] *= 0.9
+        
+                    
+    #return params
+    return best_error
 
-
+#twiddle()
+#params = twiddle()
+#final_error = run(params)
+#print "Final run(%s) error %s" % (repr(params), final_error)
 
