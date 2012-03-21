@@ -185,8 +185,8 @@ def twiddle(tol = 0.1):
                     bumps[i] *= 0.9
         
                     
-    #return params
-    return best_error
+    return params
+    #return best_error
 
 params = twiddle()
 final_error = run(params)
