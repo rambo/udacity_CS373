@@ -160,6 +160,12 @@ def run(params):
             
 def twiddle(tol = 0.1):
 
+    # Basic init without any sensible guesses
+    n_params = 3
+    params = [0.0 for col in range(n_params)] # aka [0.0,0.0,0.0]
+    bumps = [1.0 for col in range(n_params)] # aka [1.0,1.0,1.0]
+
+    # Educated guesses to reduce rounds and improve accuracy
     params = [2.0, 8.0, 0.0] # P D and I
     bumps = [0.1, 0.1, 0.2]
     n = 0
