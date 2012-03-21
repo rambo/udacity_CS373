@@ -160,8 +160,8 @@ def run(params):
             
 def twiddle(tol = 0.1):
 
-    params = [0.0, 0.0, 0.0] # P D and I
-    bumps = [1.0, 1.0, 1.0]
+    params = [2.0, 8.0, 0.0] # P D and I
+    bumps = [0.1, 0.1, 0.2]
     n = 0
     
     best_error = run(params)
@@ -185,8 +185,8 @@ def twiddle(tol = 0.1):
                     bumps[i] *= 0.9
         
                     
+#    return best_error
     return params
-    #return best_error
 
 params = twiddle()
 final_error = run(params)
