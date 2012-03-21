@@ -138,6 +138,7 @@ class robot:
 def run(param1, param2):
     myrobot = robot()
     myrobot.set(0.0, 1.0, 0.0)
+    myrobot.set_steering_drift(10.0/ 180.0 * pi) # 10deg drift (huge)
     speed = 1.0 # motion distance is equal to speed (we assume time = 1)
     delta_t = 1.0
     N = 100
@@ -152,7 +153,7 @@ def run(param1, param2):
         print myrobot, steering
 
 # Call your function with parameters of 0.2 and 3.0 and print results
-run(0.2, 3.0)
+run(0.2, 0.0)
 
 
 

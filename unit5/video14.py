@@ -149,9 +149,20 @@ def run(param1, param2, param3):
     speed = 1.0 # motion distance is equal to speed (we assume time = 1)
     N = 100
     myrobot.set_steering_drift(10.0 / 180.0 * pi) # 10 degree bias, this will be added in by the move function, you do not need to add it below!
-    #
-    # Enter code here
-    #
+    delta_t = 1.0
+    N = 100
+    taup = param1
+    taud = param2
+    taui = param3
+    
+    prev_cte = myrobot.y #crosstrack error is the plain y in this case
+    all_cte = myrobot.y
+    for step in range(N):
+        steering = (-taup * myrobot.y) + (-taud * ((myrobot.y-prev_cte)/delta_t)) + (-taui * all_cte)
+        prev_cte = myrobot.y # This needs to be updated before movement or it will always be same as current)
+        myrobot = myrobot.move(steering, speed)
+        all_cte += myrobot.y # This needs to be updated after movement
+        print myrobot, steering
 
 # Call your function with parameters of (0.2, 3.0, and 0.004)
 run(0.2, 3.0, 0.004)
