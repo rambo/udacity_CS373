@@ -32,7 +32,7 @@ path = [[0, 0],
 # smooth coordinates
 #
 
-def smooth(path, weight_data = 0.5, weight_smooth = 0.1):
+def smooth(path, weight_data = 0.5, weight_smooth = 0.1, tolerance = 0.000001):
 
     # Make a deep copy of path into newpath
     newpath = [[0 for row in range(len(path[0]))] for col in range(len(path))]
@@ -44,7 +44,8 @@ def smooth(path, weight_data = 0.5, weight_smooth = 0.1):
     #### ENTER CODE BELOW THIS LINE ###
     alpha = weight_data
     beta = weight_smooth
-    tolerance = 0.001 * (len(path)-2)
+    # Seems these tolerances are way too high...
+    #tolerance = 0.001 * (len(path)-2)
     tmppath = [[0 for row in range(len(path[0]))] for col in range(len(path))]
     last_total_change = 0
     while True:
@@ -57,21 +58,24 @@ def smooth(path, weight_data = 0.5, weight_smooth = 0.1):
             
             for j in range(len(path[i])): # Update each term (we don't have the matrix class now...)
                 # "official example (that in actually a bit wrong, see http://www.udacity-forums.com/cs373/questions/23361/unit5-5-gradient-descent-simultaneous-update)
-                #newpath[i][j] += weight_data * (path[i][j] - newpath[i][j])
-                #newpath[i][j] += weight_smooth * (newpath[i-1][j] + newpath[i+1][j] - (2.0 * newpath[i][j]))
+                tmptmp = newpath[i][j]
+                newpath[i][j] += weight_data * (path[i][j] - newpath[i][j])
+                newpath[i][j] += weight_smooth * (newpath[i-1][j] + newpath[i+1][j] - (2.0 * newpath[i][j]))
+                total_change += abs(tmptmp -  newpath[i][j])
+                
                 
                 # Version doing it properly (from same URL)
-                alpha_value = alpha * (path[i][j] - newpath[i][j])
-                beta_value = beta * (newpath[i+1][j] + newpath[i-1][j] - 2 * newpath[i][j])
-                tmppath[i][j] += alpha_value + beta_value
+#                alpha_value = alpha * (path[i][j] - newpath[i][j])
+#                beta_value = beta * (newpath[i+1][j] + newpath[i-1][j] - 2 * newpath[i][j])
+#                tmppath[i][j] += alpha_value + beta_value
                 
                 #print "alpha_value=%f beta_value=%f" % (alpha_value, beta_value)
 
-                total_change += abs(alpha_value+beta_value) # This produces a value approaching zero
+#                total_change += abs(alpha_value+beta_value) # This produces a value approaching zero
             
-        newpath = tmppath
+ #       newpath = tmppath
 
-        #print "total_change %f (tolerance %f)" % (total_change, tolerance)
+        print "total_change %f (tolerance %f)" % (total_change, tolerance)
         if (   total_change < tolerance # Good enough
             or total_change == last_total_change): # Stops changing
             break
