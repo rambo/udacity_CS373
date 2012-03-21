@@ -167,7 +167,7 @@ def twiddle(tol = 0.1):
     best_error = run(params)
     while sum(bumps) > tol:
         n += 1
-        #print "Twiddle #%d, best_error=%s, sum(bumps)=%s" % (n, best_error, sum(bumps))
+        print "Twiddle #%d, best_error=%s, sum(bumps)=%s" % (n, best_error, sum(bumps))
         for i in range(len(params)):
             params[i] += bumps[i]
             error = run(params)
@@ -188,8 +188,7 @@ def twiddle(tol = 0.1):
     #return params
     return best_error
 
-#twiddle()
-#params = twiddle()
-#final_error = run(params)
-#print "Final run(%s) error %s" % (repr(params), final_error)
+params = twiddle()
+final_error = run(params)
+print "Final run(%s) error %s" % (repr(params), final_error)
 
