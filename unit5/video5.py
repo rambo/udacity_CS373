@@ -47,9 +47,9 @@ def smooth(path, weight_data = 0.5, weight_smooth = 0.1, tolerance = 0.000001):
     # Seems these tolerances are way too high...
     #tolerance = 0.001 * (len(path)-2)
     tmppath = [[0 for row in range(len(path[0]))] for col in range(len(path))]
-    last_total_change = 0
+    last_total_change = 0.0
     while True:
-        total_change = 0
+        total_change = 0.0
         for i in range(len(path)):
             # Skip first and last
             if (   i == 0
