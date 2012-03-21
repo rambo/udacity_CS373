@@ -111,9 +111,9 @@ def smooth(path, fix, weight_data = 0.0, weight_smooth = 0.1, tolerance = 0.0000
         
         last_total_change = total_change
 
-    # DEBUG: remove
-    for i in range(len(path)):
-        print '['+ ', '.join('%.3f'%x for x in path[i]) +'] -> ['+ ', '.join('%.3f'%x for x in newpath[i]) +']'
+#    # DEBUG: remove
+#    for i in range(len(path)):
+#        print '['+ ', '.join('%.3f'%x for x in path[i]) +'] -> ['+ ', '.join('%.3f'%x for x in newpath[i]) +']'
 
     return newpath
 
@@ -226,10 +226,10 @@ answer2 = [[0, 0],
            [-0.7015438099112995, 1.9883232808252207]]
 
 
-# My DEBUGs, comment out
-print "Test path 1"
-solution_check(smooth(testpath2, testfix2), answer2)
-print "Test path 1"
-solution_check(smooth(testpath2, testfix2), answer2)
+## My DEBUGs, comment out
+#print "Test path 1"
+#solution_check(smooth(testpath2, testfix2), answer2)
+#print "Test path 1"
+#solution_check(smooth(testpath2, testfix2), answer2)
 
 
