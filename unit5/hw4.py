@@ -146,8 +146,10 @@ class robot:
             and self.x <= straight_end):
             # Then check if it's the upper or the lower straight
             if self.y > radius:
+                print "in upper straight"
                 return self.y - 2*radius
             else:
+                print "in lower straight"
                 return 0.0  -self.y # We're going the other way so we need to invert the steering
         
         # So we're in the semicircles
@@ -155,13 +157,16 @@ class robot:
             #first semicircle
             # special case of angle being zero
             if self.y == radius:
+                print "left middle"
                 return 0.0 - self.x
             if self.y > radius:
                 # Upper quadrant
+                print "left upper quadrant"
                 edge_a = radius - self.x
                 edge_b = self.y - radius
             else:
                 # Lower quadrant
+                print "left lower quadrant"
                 edge_a = radius - self.x
                 edge_b = radius - self.y
             hyp = sqrt(edge_a**2 + edge_b**2)
@@ -170,16 +175,20 @@ class robot:
             # second semicircle
             # special case of angle being zero
             if self.y == radius:
+                print "right middle"
                 return (straight_end + radius) - self.x
             if self.y > radius:
                 # Upper quadrant
-                edge_a = (straight_end + radius) - self.x
+                print "right upper quadrant"
+                edge_a = self.x - straight_end
                 edge_b = self.y - radius
             else:
                 # Lower quadrant
-                edge_a = (straight_end + radius) - self.x
+                print "right lower quadrant"
+                edge_a = self.x - straight_end
                 edge_b = radius - self.y
 
+            print "edge_a=%f edge_b=%f" % (edge_a, edge_b)
             hyp = sqrt(edge_a**2 + edge_b**2)
             return hyp - radius
 
