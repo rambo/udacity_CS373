@@ -146,10 +146,10 @@ class robot:
             and self.x <= straight_end):
             # Then check if it's the upper or the lower straight
             if self.y > radius:
-                print "in upper straight"
+                #print "in upper straight"
                 return self.y - 2*radius
             else:
-                print "in lower straight"
+                #print "in lower straight"
                 return 0.0  -self.y # We're going the other way so we need to invert the steering
         
         # So we're in the semicircles
@@ -157,16 +157,16 @@ class robot:
             #first semicircle
             # special case of angle being zero
             if self.y == radius:
-                print "left middle"
+                #print "left middle"
                 return 0.0 - self.x
             if self.y > radius:
                 # Upper quadrant
-                print "left upper quadrant"
+                #print "left upper quadrant"
                 edge_a = radius - self.x
                 edge_b = self.y - radius
             else:
                 # Lower quadrant
-                print "left lower quadrant"
+                #print "left lower quadrant"
                 edge_a = radius - self.x
                 edge_b = radius - self.y
             hyp = sqrt(edge_a**2 + edge_b**2)
@@ -175,20 +175,20 @@ class robot:
             # second semicircle
             # special case of angle being zero
             if self.y == radius:
-                print "right middle"
+                #print "right middle"
                 return (straight_end + radius) - self.x
             if self.y > radius:
                 # Upper quadrant
-                print "right upper quadrant"
+                #print "right upper quadrant"
                 edge_a = self.x - straight_end
                 edge_b = self.y - radius
             else:
                 # Lower quadrant
-                print "right lower quadrant"
+                #print "right lower quadrant"
                 edge_a = self.x - straight_end
                 edge_b = radius - self.y
 
-            print "edge_a=%f edge_b=%f" % (edge_a, edge_b)
+            #print "edge_a=%f edge_b=%f" % (edge_a, edge_b)
             hyp = sqrt(edge_a**2 + edge_b**2)
             return hyp - radius
 
@@ -227,9 +227,7 @@ def run(params, radius, printflag = False):
         if i >= N:
             err += crosstrack_error ** 2
         if printflag:
-            # DEBUG: Remove from submission
-            print myrobot,crosstrack_error
-#            print myrobot
+            print myrobot
     return err / float(N)
 
 radius = 25.0
