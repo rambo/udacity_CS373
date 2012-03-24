@@ -138,12 +138,53 @@ class robot:
 ############## ONLY ADD / MODIFY CODE BELOW THIS LINE ####################
    
     def cte(self, radius):
-        # 
-        #
-        # Add code here
-        #
-        #            
-        return cte
+        straight_start = radius
+        straight_end = straight_start + 2*radius
+    
+        # divide and conquer, first check if we're in the straight part of the track
+        if (    self.x >= straight_start
+            and self.x <= straight_end):
+            # Then check if it's the upper or the lower straight
+            if self.y > radius:
+                return self.y - 2*radius
+            else:
+                return 0.0  -self.y # We're going the other way so we need to invert the steering
+        
+        # So we're in the semicircles
+        if self.x < straight_start:
+            #first semicircle
+            # special case of angle being zero
+            if self.y == radius:
+                return 0.0 - self.x
+            if self.y > radius:
+                # Upper quadrant
+                edge_a = radius - self.x
+                edge_b = self.y - radius
+            else:
+                # Lower quadrant
+                edge_a = radius - self.x
+                edge_b = radius - self.y
+            hyp = sqrt(edge_a**2 + edge_b**2)
+            return hyp - radius
+        else:
+            # second semicircle
+            # special case of angle being zero
+            if self.y == radius:
+                return (straight_end + radius) - self.x
+            if self.y > radius:
+                # Upper quadrant
+                edge_a = (straight_end + radius) - self.x
+                edge_b = self.y - radius
+            else:
+                # Lower quadrant
+                edge_a = (straight_end + radius) - self.x
+                edge_b = radius - self.y
+
+            hyp = sqrt(edge_a**2 + edge_b**2)
+            return hyp - radius
+
+#   We do  not reach this
+#        return cte
     
 ############## ONLY ADD / MODIFY CODE ABOVE THIS LINE ####################
 
