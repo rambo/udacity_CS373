@@ -218,7 +218,9 @@ def run(params, radius, printflag = False):
         if i >= N:
             err += crosstrack_error ** 2
         if printflag:
-            print myrobot
+            # DEBUG: Remove from submission
+            print myrobot,crosstrack_error
+#            print myrobot
     return err / float(N)
 
 radius = 25.0
