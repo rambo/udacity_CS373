@@ -337,6 +337,11 @@ def doit(initial_pos, move1, move2, Z0, Z1, Z2):
                  [0.0],
                  [0.0]])
 
+
+    Omega.show('Omega (initial): ')
+    Xi.show('Xi (initial):    ')
+
+
     Omega += matrix([[1.0, -1.0, 0.0],
                      [-1.0, 1.0, 0.0],
                      [0.0, 0.0, 0.0]])
@@ -344,6 +349,10 @@ def doit(initial_pos, move1, move2, Z0, Z1, Z2):
                   [move1],
                   [0.0]])
     
+    Omega.show('Omega (mv1): ')
+    Xi.show('Xi (mv1):    ')
+
+
     Omega += matrix([[0.0, 0.0, 0.0],
                      [0.0, 1.0, -1.0],
                      [0.0, -1.0, 1.0]])
@@ -351,11 +360,49 @@ def doit(initial_pos, move1, move2, Z0, Z1, Z2):
                   [-move2],
                   [move2]])
 
-    #
-    #
-    # Add your code here.
-    #
-    #
+    Omega.show('Omega (mv2): ')
+    Xi.show('Xi (mv2):    ')
+
+    Omega = Omega.expand(4,4,[0,1,2],[0,1,2])
+    Xi = Xi.expand(4,1,[0,1,2],[0])
+
+    # meas 1
+    Omega += matrix([[0.0, 0.0, 0.0, 1.0],
+                     [0.0, 0.0, 0.0, 0.0],
+                     [0.0, 0.0, 0.0, 0.0],
+                     [1.0, 0.0, 0.0, 0.0]])
+    Xi += matrix([[0.0],
+                  [0.0],
+                  [0.0],
+                  [Z0]])
+
+    Omega.show('Omega (Z0): ')
+    Xi.show('Xi (Z0):    ')
+
+    # meas 2
+    Omega += matrix([[0.0, 0.0, 0.0, 0.0],
+                     [0.0, 0.0, 0.0, 1.0],
+                     [0.0, 0.0, 0.0, 0.0],
+                     [0.0, 1.0, 0.0, 0.0]])
+    Xi += matrix([[0.0],
+                  [0.0],
+                  [0.0],
+                  [Z1]])
+
+    Omega.show('Omega (Z1): ')
+    Xi.show('Xi (Z1):    ')
+
+    # meas 3
+    Omega += matrix([[0.0, 0.0, 0.0, 0.0],
+                     [0.0, 0.0, 0.0, 0.0],
+                     [0.0, 0.0, 0.0, 1.0],
+                     [0.0, 0.0, 1.0, 0.0]])
+    Xi += matrix([[0.0],
+                  [0.0],
+                  [0.0],
+                  [Z2]])
+
+    
 
     Omega.show('Omega: ')
     Xi.show('Xi:    ')
