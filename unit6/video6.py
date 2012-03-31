@@ -478,9 +478,6 @@ def run(grid, goal, spath, params, printflag = False, speed = 0.1, timeout = 100
 
     index = 0 # index into the path
     
-    #debug remove
-    print spath
-    
     while not myrobot.check_goal(goal) and N < timeout:
 
         diff_cte = - cte
@@ -492,24 +489,33 @@ def run(grid, goal, spath, params, printflag = False, speed = 0.1, timeout = 100
         # start with the present robot estimate
         estimate = filter.get_position()
 
-
-        # Avoid going over our path
-        maxindex = len(spath)-1
-        nextindex = index+1
-        if nextindex > maxindex:
-            nextindex = maxindex
+        def getsegment(index, spath):
+            # Avoid going over our path
+            maxindex = len(spath)-1
+            nextindex = index+1
+            if nextindex > maxindex:
+                nextindex = maxindex
+            
+            current_segment = [spath[index], spath[nextindex]]
+            return (current_segment, [(current_segment[1][0]-current_segment[0][0]), (current_segment[1][1]-current_segment[0][1])])
         
-        current_segment = [spath[index], spath[nextindex]]
-        delta = [(current_segment[1][0]-current_segment[0][0]), (current_segment[1][1]-current_segment[0][1])]
-
-        R = [ (estimate[0]-current_segment[0][0]), (estimate[1]-current_segment[0][1])]
-        # If this is longer than 1 we are beyond the current segment and should increase index.
-        u = ((R[0] * delta[0]) + (R[1] * delta[1])) / ((delta[0] ** 2) + (delta[1] ** 2))
+        current_segment, delta = getsegment(index, spath)
+        
+        def getRu(estimate, current_segment, delta):
+            R = [ (estimate[0]-current_segment[0][0]), (estimate[1]-current_segment[0][1])]
+            # If this is longer than 1 we are beyond the current segment and should increase index.
+            u = ((R[0] * delta[0]) + (R[1] * delta[1])) / ((delta[0] ** 2) + (delta[1] ** 2))
+            return (R, u)
+        
+        R, u = getRu(estimate, current_segment, delta)
+        
         if u > 1.0:
-            index += 1
             # increase index, 
-            # Do we need to project the line from the next segment so that we can calculate the new cte ?
-        
+            index += 1
+            # Do we need to project the line from the next segment so that we can properly calculate the new cte ?
+            current_segment, delta = getsegment(index, spath)
+            R, u = getRu(estimate, current_segment, delta)
+            
         cte = ((R[1] * delta[0]) - (R[0] * delta[1])) / ((delta[0] ** 2) + (delta[1] ** 2))
         
         
