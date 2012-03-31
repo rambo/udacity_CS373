@@ -517,6 +517,8 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
     xi.value[0][0] = 50.0
     xi.value[1][0] = 50.0
 
+    print "omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (omega.dimx, omega.dimy, xi.dimx)
+
     for i in range(N-1):
         seen_landmarks, estimated_position = data[i]
         
@@ -553,28 +555,24 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
 
             print "i=%d, landmark #%d seen at %.3f,%.3f. lm_ix,y=%d,%d" % (i, lm_no, lm_info[1], lm_info[2], lm_ix, lm_iy)
 
-            # Diagonal of the X measurement (TODO: add the uncertainty)
-            omega.value[lm_ix][ix] += 1.0
-            omega.value[lm_ix+2][ix+2] += 1.0
-            # Cross diagonal
+            # Diagonals of the X measurement (TODO: add the uncertainty)
+            omega.value[ix][ix] += 1.0 # Measurement point
             omega.value[ix][lm_ix] -= 1.0
-            omega.value[ix+2][lm_ix+2] -= 1.0
+            omega.value[lm_ix][ix] -= 1.0
             # And the landmark index itself
             omega.value[lm_ix][lm_ix] += 1.0
-            
 
-            # Diagonal of the Y measurement (TODO: add the uncertainty)
-            omega.value[lm_iy][iy] += 1.0
-            omega.value[lm_iy+2][iy+2] += 1.0
-            # Cross diagonal
+            # Diagonals of the Y measurement (TODO: add the uncertainty)
+            omega.value[iy][iy] += 1.0
             omega.value[iy][lm_iy] -= 1.0
-            omega.value[iy+2][lm_iy+2] -= 1.0
+            omega.value[lm_iy][iy] -= 1.0
             # And the landmark index itself
             omega.value[lm_iy][lm_iy] += 1.0
 
 
-            xi.value[i][0] -= lm_info[1] # X update
+            xi.value[ix][0] -= lm_info[1] # X update
             xi.value[lm_ix][0] += lm_info[1] # X update
+
             xi.value[iy][0] -= lm_info[2] # Y update
             xi.value[lm_iy][0] += lm_info[2] # Y update
             
