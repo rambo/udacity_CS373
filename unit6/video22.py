@@ -504,6 +504,30 @@ def print_result(N, num_landmarks, result):
 ############## ENTER YOUR CODE BELOW HERE ###################
 
 def slam(data, N, num_landmarks, motion_noise, measurement_noise):
+    # Initialize the matrices (I could initialize it already to correct size for N but I think it will be more "realistic" to expand it as we go on to learn about the environment
+    omega = matrix()
+    omega.zero(2+num_landmarks*2, 2+num_landmarks*2) # x0,xy0,Lxy0...N
+    xi = matrix()
+    xi.zero(2+num_landmarks*2,1)
+    
+    # Initial posit
+    print "num_landmarks=%d" % num_landmarks
+    
+    for i in range(N):
+        if i == 0:
+            continue # the initial position is set outside of this loop
+#        keep_indices = range(0,(i-1)*2+2) # The existing x,y koordinates
+#        print "i=%d,omega.dimx=%d,keep_indices=%s" % (i,omega.dimx,keep_indices)
+#        keep_indices.extend(range(omega.dimx-2*num_landmarks, omega.dimx))
+#        print "i=%d,omega.dimx=%d,keep_indices=%s" % (i,omega.dimx,keep_indices)
+        num_coords = (i-1)*2+2
+        keep_indices = [0 for i in range(omega.dimx+2)] # Initialize empty list for the indices to keep
+        keep_indices[:num_coords] = range(0,num_coords)
+        keep_indices[-num_landmarks:] = range(omega.dimx-2*num_landmarks, omega.dimx)
+        
+
+        omega = omega.expand(omega.dimx+2, omega.dimy+2, keep_indices, keep_indices)
+        xi = xi.expand(xi.dimx+2, xi.dimy, keep_indices, [0])
     #
     #
     # Add your code here!
