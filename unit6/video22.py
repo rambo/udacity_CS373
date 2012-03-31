@@ -513,9 +513,8 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
     # Initial position
     omega.value[0][0] = 1.0 # Initial X
     omega.value[1][1] = 1.0 # Initial Y
-    # TODO: How to know the world size ? 
-    xi.value[0][0] = 50.0
-    xi.value[1][0] = 50.0
+    xi.value[0][0] = world_size / 2.0
+    xi.value[1][0] = world_size / 2.0
 
     #print "omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (omega.dimx, omega.dimy, xi.dimx)
 
