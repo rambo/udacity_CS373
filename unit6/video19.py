@@ -411,6 +411,6 @@ def doit(initial_pos, move1, move2, Z0, Z1, Z2):
     
     return mu
 
-doit(-3, 5, 3, 10, 5, 2)
+doit(-3, 5, 3, 10, 5, 1)
 
 
