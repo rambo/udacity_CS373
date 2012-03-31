@@ -346,7 +346,7 @@ def doit(initial_pos, move1, move2, Z0, Z1, Z2):
                  [0.0],
                  [0.0]])
 
-
+    # move 1 
     Omega += matrix([[1.0, -1.0, 0.0, 0.0, 0.0],
                     [-1.0, 1.0, 0.0, 0.0, 0.0],
                     [0.0, 0.0, 0.0, 0.0, 0.0],
@@ -357,6 +357,19 @@ def doit(initial_pos, move1, move2, Z0, Z1, Z2):
                  [0.0],
                  [0.0],
                  [0.0]])
+
+    # move 2 
+    Omega += matrix([[0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 1.0, -1.0, 0.0, 0.0],
+                    [0.0, -1.0, 1.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0]])
+    Xi += matrix([[0.0],
+                 [-move2],
+                 [move2],
+                 [0.0],
+                 [0.0]])
+
 
     # We know this is the case so I won't bother with the other case
     if (Z0[0] == 0):
@@ -398,42 +411,6 @@ def doit(initial_pos, move1, move2, Z0, Z1, Z2):
                      [0.0],
                      [Z2[1]]])
 
-
-#    dimx = len(moves)+2
-#    omega = matrix()
-#    omega.zero(dimx, dimx)
-#    xi = matrix()
-#    xi.zero(dimx,1)
-#    
-#
-#    
-#    for ix in range(len(moves)-1):
-#        ix_next = ix+1
-#        
-#        print "ix=%d,ix_next=%d" % (ix, ix_next)
-#        
-#        omega.value[ix][ix] += 1.0 / motion_noise
-#        omega.value[ix_next][ix_next] += 1.0 / motion_noise
-#        # Cross diagonal
-#        omega.value[ix_next][ix] -= 1.0 / motion_noise
-#        omega.value[ix][ix_next] -= 1.0 / motion_noise
-#
-#        xi.value[ix][0] -= moves[ix] / motion_noise# X update
-#        xi.value[ix_next][0] += moves[ix] / motion_noise# X update
-#
-#        
-#        sense = senses[ix]
-#        lm_ix = (num_lm - sense[0]) * -1 # for landmark id#0 this should be -10 for landmark#4 is should be -2
-#
-#        omega.value[ix][ix] += 1.0 / measurement_noise# Measurement point
-#        omega.value[ix][lm_ix] -= 1.0 / measurement_noise
-#        omega.value[lm_ix][ix] -= 1.0 / measurement_noise
-#        # And the landmark index itself
-#        omega.value[lm_ix][lm_ix] += 1.0 /measurement_noise
-#        
-#        xi.value[ix][0] -= sense[1] / measurement_noise # X update
-#        xi.value[lm_ix][0] += sense[1] / measurement_noise # X update
-
     print "omega"
     Omega.show()
     print "xi"
@@ -445,5 +422,5 @@ def doit(initial_pos, move1, move2, Z0, Z1, Z2):
     mu.show()
 
 
-doit(2,7,2,[0,2],[1,2],[1,2])
+doit(5,7,2,[0,2],[1,4],[1,2])
 
