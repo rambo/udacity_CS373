@@ -513,8 +513,9 @@ def run(grid, goal, spath, params, printflag = False, speed = 0.1, timeout = 100
             # increase index, 
             index += 1
             # Do we need to project the line from the next segment so that we can properly calculate the new cte ?
-            current_segment, delta = getsegment(index, spath)
-            R, u = getRu(estimate, current_segment, delta)
+            # It seems prog thrun doe not recalculate these at this point
+            #current_segment, delta = getsegment(index, spath)
+            #R, u = getRu(estimate, current_segment, delta)
             
         cte = ((R[1] * delta[0]) - (R[0] * delta[1])) / ((delta[0] ** 2) + (delta[1] ** 2))
         
