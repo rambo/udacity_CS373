@@ -517,7 +517,7 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
     xi.value[0][0] = 50.0
     xi.value[1][0] = 50.0
 
-    print "omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (omega.dimx, omega.dimy, xi.dimx)
+    #print "omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (omega.dimx, omega.dimy, xi.dimx)
 
     for i in range(N-1):
         seen_landmarks, estimated_position = data[i]
@@ -527,7 +527,7 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
         ix_next = ix+2
         iy_next = iy+2
     
-        print "ix,y=%d,%d ix,y_next=%d,%d" % (ix,iy, ix_next, iy_next)
+        #print "ix,y=%d,%d ix,y_next=%d,%d" % (ix,iy, ix_next, iy_next)
     
         # Diagonal of the X movement (TODO: add the uncertainty)
         omega.value[ix][ix] += 1.0
@@ -557,7 +557,7 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
             lm_ix = (num_landmarks - lm_no) * -2 # for landmark id#0 this should be -10 for landmark#4 is should be -2
             lm_iy = lm_ix+1
 
-            print "i=%d, landmark #%d seen at %.3f,%.3f. lm_ix,y=%d,%d" % (i, lm_no, lm_info[1], lm_info[2], lm_ix, lm_iy)
+            #print "i=%d, landmark #%d seen at %.3f,%.3f. lm_ix,y=%d,%d" % (i, lm_no, lm_info[1], lm_info[2], lm_ix, lm_iy)
 
             # Diagonals of the X measurement (TODO: add the uncertainty)
             omega.value[ix][ix] += 1.0 # Measurement point
@@ -582,11 +582,11 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
             
 
         
-        print "omega at i=%d" % i
-        omega.show()
-
-        print "xi at i=%d" % i
-        xi.show()
+#        print "omega at i=%d" % i
+#        omega.show()
+#
+#        print "xi at i=%d" % i
+#        xi.show()
         
         
         
