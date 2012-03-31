@@ -320,30 +320,48 @@ def calc():
     moves = [5,7,2]
     senses = [[0,2],[1,4],[1,2]]
     measurement_noise = 0.5 # meaning high certainty
+    motion_noise = 1.0
 
-    dimx = len(moves)+2
-    omega = matrix()
-    omega.zero(dimx, dimx)
-    xi = matrix()
-    xi.zero(dimx,1)
-    
+#    dimx = len(moves)+2
+#    omega = matrix()
+#    omega.zero(dimx, dimx)
+#    xi = matrix()
+#    xi.zero(dimx,1)
+#    
+#
+#    
+#    for ix in range(len(moves)-1):
+#        ix_next = ix+1
+#        
+#        print "ix=%d,ix_next=%d" % (ix, ix_next)
+#        
+#        omega.value[ix][ix] += 1.0 / motion_noise
+#        omega.value[ix_next][ix_next] += 1.0 / motion_noise
+#        # Cross diagonal
+#        omega.value[ix_next][ix] -= 1.0 / motion_noise
+#        omega.value[ix][ix_next] -= 1.0 / motion_noise
+#
+#        xi.value[ix][0] -= moves[ix] / motion_noise# X update
+#        xi.value[ix_next][0] += moves[ix] / motion_noise# X update
+#
+#        
+#        sense = senses[ix]
+#        lm_ix = (num_lm - sense[0]) * -1 # for landmark id#0 this should be -10 for landmark#4 is should be -2
+#
+#        omega.value[ix][ix] += 1.0 / measurement_noise# Measurement point
+#        omega.value[ix][lm_ix] -= 1.0 / measurement_noise
+#        omega.value[lm_ix][ix] -= 1.0 / measurement_noise
+#        # And the landmark index itself
+#        omega.value[lm_ix][lm_ix] += 1.0 /measurement_noise
+#        
+#        xi.value[ix][0] -= sense[1] / measurement_noise # X update
+#        xi.value[lm_ix][0] += sense[1] / measurement_noise # X update
 
-    
-    for ix in range(len(moves)-1):
-        omega.value[ix][ix] = 1.0 # Since this is always one we do not need to handle the initial certainty
-        xi.value[ix][ix] = moves[ix]
-        
-        sense = senses[ix]
-        lm_ix = (num_lm - sense[0]) * -2 # for landmark id#0 this should be -10 for landmark#4 is should be -2
+    print "omega"
+    omega.show()
+    print "xi"
+    xi.show()
 
-        omega.value[ix][ix] += 1.0 / measurement_noise# Measurement point
-        omega.value[ix][lm_ix] -= 1.0 / measurement_noise
-        omega.value[lm_ix][ix] -= 1.0 / measurement_noise
-        # And the landmark index itself
-        omega.value[lm_ix][lm_ix] += 1.0 /measurement_noise
-        
-        xi.value[ix][0] -= sense[1] / measurement_noise # X update
-        xi.value[lm_ix][0] += sense[1] / measurement_noise # X update
         
     mu = omega.inverse() * xi
     print "mu"
