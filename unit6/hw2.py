@@ -522,9 +522,7 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
         seen_landmarks, estimated_position = data[i]
         
         ix = i
-        iy = ix+1
-        ix_next = ix+2
-        iy_next = iy+2
+        ix_next = ix+1
     
         #print "ix,y=%d,%d ix,y_next=%d,%d" % (ix,iy, ix_next, iy_next)
     
@@ -612,12 +610,12 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
 
 
 num_landmarks      = 15        # number of landmarks
-N                  = 30       # time steps
+N                  = 35       # time steps
 world_size         = 100.0    # size of world
-measurement_range  = 25.0     # range at which we can sense landmarks
+measurement_range  = 15.0     # range at which we can sense landmarks
 motion_noise       = 1.0      # noise in robot motion
 measurement_noise  = 1.0      # noise in the measurements
-distance           = 20.0     # distance by which robot (intends to) move each iteratation 
+distance           = 15.0     # distance by which robot (intends to) move each iteratation 
 
 data = make_data(N, num_landmarks, world_size, measurement_range, motion_noise, measurement_noise, distance)
 result = slam(data, N, num_landmarks, motion_noise, measurement_noise)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
