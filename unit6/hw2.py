@@ -116,7 +116,7 @@ class matrix:
         for i in range(len(self.value)):
             #print txt + '['+ ', '.join('%+.3f'%x for x in self.value[i]) + ']' 
             # DEBUG: remove and uncomment above
-            print txt + '['+ ', '.join('%+.3f'%x for x in self.value[i]) + ']' 
+            print txt + '['+ ', '.join('%+.1f'%x for x in self.value[i]) + ']' 
         print ' '
 
     # ------------
@@ -506,22 +506,22 @@ def print_result(N, num_landmarks, result):
 ############## ENTER YOUR CODE BELOW HERE ###################
 def slam(data, N, num_landmarks, motion_noise, measurement_noise):
     omega = matrix()
-    omega.zero(N*2+num_landmarks*2, N*2+num_landmarks*2) # x0,xy0,Lxy0...N
+    omega.zero(N+num_landmarks, N+num_landmarks) # x0,xy0,Lxy0...N
     xi = matrix()
-    xi.zero(N*2+num_landmarks*2,1)
+    xi.zero(N+num_landmarks,1)
     
     # Initial position
     omega.value[0][0] = 1.0 # Initial X
     omega.value[1][1] = 1.0 # Initial Y
     xi.value[0][0] = world_size / 2.0
-    xi.value[1][0] = world_size / 2.0
+    #xi.value[1][0] = world_size / 2.0
 
     #print "omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (omega.dimx, omega.dimy, xi.dimx)
 
     for i in range(N-1):
         seen_landmarks, estimated_position = data[i]
         
-        ix = i*2
+        ix = i
         iy = ix+1
         ix_next = ix+2
         iy_next = iy+2
@@ -536,16 +536,16 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
         omega.value[ix][ix_next] -= 1.0 / motion_noise
 
         # Diagonal of the Y movement (TODO: add the uncertainty)
-        omega.value[iy][iy] += 1.0 / motion_noise
-        omega.value[iy_next][iy_next] += 1.0 / motion_noise
-        # Cross diagonal
-        omega.value[iy_next][iy] -= 1.0 / motion_noise
-        omega.value[iy][iy_next] -= 1.0 / motion_noise
+#        omega.value[iy][iy] += 1.0 / motion_noise
+#        omega.value[iy_next][iy_next] += 1.0 / motion_noise
+#        # Cross diagonal
+#        omega.value[iy_next][iy] -= 1.0 / motion_noise
+#        omega.value[iy][iy_next] -= 1.0 / motion_noise
 
         xi.value[ix][0] -= estimated_position[0] / motion_noise# X update
         xi.value[ix_next][0] += estimated_position[0] / motion_noise# X update
-        xi.value[iy][0] -= estimated_position[1] / motion_noise# Y update
-        xi.value[iy_next][0] += estimated_position[1] / motion_noise# Y update
+        #xi.value[iy][0] -= estimated_position[1] / motion_noise# Y update
+        #xi.value[iy_next][0] += estimated_position[1] / motion_noise# Y update
 
 
         # Landmark update
@@ -553,10 +553,10 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
             lm_no = lm_info[0]
 
 
-            lm_ix = (num_landmarks - lm_no) * -2 # for landmark id#0 this should be -10 for landmark#4 is should be -2
+            lm_ix = (num_landmarks - lm_no) * -1 # for landmark id#0 this should be -10 for landmark#4 is should be -2
             lm_iy = lm_ix+1
 
-            #print "i=%d, landmark #%d seen at %.3f,%.3f. lm_ix,y=%d,%d" % (i, lm_no, lm_info[1], lm_info[2], lm_ix, lm_iy)
+            print "i=%d, landmark #%d seen at %.3f,%.3f. lm_ix,y=%d,%d" % (i, lm_no, lm_info[1], lm_info[2], lm_ix, lm_iy)
 
             # Diagonals of the X measurement (TODO: add the uncertainty)
             omega.value[ix][ix] += 1.0 / measurement_noise# Measurement point
@@ -566,18 +566,18 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
             omega.value[lm_ix][lm_ix] += 1.0 /measurement_noise
 
             # Diagonals of the Y measurement (TODO: add the uncertainty)
-            omega.value[iy][iy] += 1.0 / measurement_noise
-            omega.value[iy][lm_iy] -= 1.0 / measurement_noise
-            omega.value[lm_iy][iy] -= 1.0 / measurement_noise
-            # And the landmark index itself
-            omega.value[lm_iy][lm_iy] += 1.0 / measurement_noise
+#            omega.value[iy][iy] += 1.0 / measurement_noise
+#            omega.value[iy][lm_iy] -= 1.0 / measurement_noise
+#            omega.value[lm_iy][iy] -= 1.0 / measurement_noise
+#            # And the landmark index itself
+#            omega.value[lm_iy][lm_iy] += 1.0 / measurement_noise
 
 
             xi.value[ix][0] -= lm_info[1] / measurement_noise # X update
             xi.value[lm_ix][0] += lm_info[1] / measurement_noise # X update
 
-            xi.value[iy][0] -= lm_info[2] / measurement_noise # Y update
-            xi.value[lm_iy][0] += lm_info[2] / measurement_noise # Y update
+#            xi.value[iy][0] -= lm_info[2] / measurement_noise # Y update
+#            xi.value[lm_iy][0] += lm_info[2] / measurement_noise # Y update
             
 
         
@@ -612,12 +612,12 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
 
 
 num_landmarks      = 15        # number of landmarks
-N                  = 50       # time steps
+N                  = 30       # time steps
 world_size         = 100.0    # size of world
 measurement_range  = 10.0     # range at which we can sense landmarks
 motion_noise       = 1.0      # noise in robot motion
 measurement_noise  = 1.0      # noise in the measurements
-distance           = 10.0     # distance by which robot (intends to) move each iteratation 
+distance           = 20.0     # distance by which robot (intends to) move each iteratation 
 
 data = make_data(N, num_landmarks, world_size, measurement_range, motion_noise, measurement_noise, distance)
 result = slam(data, N, num_landmarks, motion_noise, measurement_noise)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
