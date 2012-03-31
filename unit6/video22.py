@@ -551,34 +551,19 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
 
             print "i=%d, landmark #%d seen at %.3f,%.3f. lm_ix,y=%d,%d" % (i, lm_no, lm_info[1], lm_info[2], lm_ix, lm_iy)
 
-            # FIXME: one of the axis' should of course be in relation to i
-            
             # Diagonal of the X measurement (TODO: add the uncertainty)
             omega.value[lm_ix][ix] += 1.0
             omega.value[lm_ix+2][ix+2] += 1.0
-
-            print "+1 diagonals %d,%d and %d,%d" % ( lm_ix,ix,lm_ix+2,ix+2)
-
-            print "omega at beofre x-diag"
-            omega.show()
-
             # Cross diagonal
             omega.value[ix][lm_ix] -= 1.0
             omega.value[ix+2][lm_ix+2] -= 1.0
 
-            print "-1 (cross) diagonals %d,%d and %d,%d" % ( ix,lm_ix,ix+2,lm_ix+2)
-
-
-            print "omega at after x-diag"
-            omega.show()
-
-    
-#            # Diagonal of the Y measurement (TODO: add the uncertainty)
-#            omega.value[lm_iy][iy] += 1.0
-#            omega.value[lm_iy+2][iy+2] += 1.0
-#            # Cross diagonal
-#            omega.value[][] -= 1.0
-#            omega.value[][] -= 1.0
+            # Diagonal of the Y measurement (TODO: add the uncertainty)
+            omega.value[lm_iy][iy] += 1.0
+            omega.value[lm_iy+2][iy+2] += 1.0
+            # Cross diagonal
+            omega.value[iy][lm_iy] -= 1.0
+            omega.value[iy+2][lm_iy+2] -= 1.0
 
             xi.value[i][0] -= lm_info[1] # X update
             xi.value[lm_ix][0] += lm_info[1] # X update
