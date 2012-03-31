@@ -337,7 +337,7 @@ def doit(initial_pos, move1, move2):
     print "xi"
     xi.show()
 
-    # first move
+    # first move (NOTE: this should actually done with adding a new matrix that would be constructed on the fly but for 1D problems this is simpler and faster)
     omega.value[0][0] += 1
     omega.value[1][0] -= 1
     omega.value[0][1] -= 1
