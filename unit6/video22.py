@@ -529,23 +529,23 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
         #print "ix,y=%d,%d ix,y_next=%d,%d" % (ix,iy, ix_next, iy_next)
     
         # Diagonal of the X movement (TODO: add the uncertainty)
-        omega.value[ix][ix] += 1.0
-        omega.value[ix_next][ix_next] += 1.0
+        omega.value[ix][ix] += 1.0 / motion_noise
+        omega.value[ix_next][ix_next] += 1.0 / motion_noise
         # Cross diagonal
-        omega.value[ix_next][ix] -= 1.0
-        omega.value[ix][ix_next] -= 1.0
+        omega.value[ix_next][ix] -= 1.0 / motion_noise
+        omega.value[ix][ix_next] -= 1.0 / motion_noise
 
         # Diagonal of the Y movement (TODO: add the uncertainty)
-        omega.value[iy][iy] += 1.0
-        omega.value[iy_next][iy_next] += 1.0
+        omega.value[iy][iy] += 1.0 / motion_noise
+        omega.value[iy_next][iy_next] += 1.0 / motion_noise
         # Cross diagonal
-        omega.value[iy_next][iy] -= 1.0
-        omega.value[iy][iy_next] -= 1.0
+        omega.value[iy_next][iy] -= 1.0 / motion_noise
+        omega.value[iy][iy_next] -= 1.0 / motion_noise
 
-        xi.value[ix][0] -= estimated_position[0] # X update
-        xi.value[ix_next][0] += estimated_position[0] # X update
-        xi.value[iy][0] -= estimated_position[1] # Y update
-        xi.value[iy_next][0] += estimated_position[1] # Y update
+        xi.value[ix][0] -= estimated_position[0] / motion_noise# X update
+        xi.value[ix_next][0] += estimated_position[0] / motion_noise# X update
+        xi.value[iy][0] -= estimated_position[1] / motion_noise# Y update
+        xi.value[iy_next][0] += estimated_position[1] / motion_noise# Y update
 
 
         # Landmark update
@@ -559,25 +559,25 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
             #print "i=%d, landmark #%d seen at %.3f,%.3f. lm_ix,y=%d,%d" % (i, lm_no, lm_info[1], lm_info[2], lm_ix, lm_iy)
 
             # Diagonals of the X measurement (TODO: add the uncertainty)
-            omega.value[ix][ix] += 1.0 # Measurement point
-            omega.value[ix][lm_ix] -= 1.0
-            omega.value[lm_ix][ix] -= 1.0
+            omega.value[ix][ix] += 1.0 / measurement_noise# Measurement point
+            omega.value[ix][lm_ix] -= 1.0 / measurement_noise
+            omega.value[lm_ix][ix] -= 1.0 / measurement_noise
             # And the landmark index itself
-            omega.value[lm_ix][lm_ix] += 1.0
+            omega.value[lm_ix][lm_ix] += 1.0 /measurement_noise
 
             # Diagonals of the Y measurement (TODO: add the uncertainty)
-            omega.value[iy][iy] += 1.0
-            omega.value[iy][lm_iy] -= 1.0
-            omega.value[lm_iy][iy] -= 1.0
+            omega.value[iy][iy] += 1.0 / measurement_noise
+            omega.value[iy][lm_iy] -= 1.0 / measurement_noise
+            omega.value[lm_iy][iy] -= 1.0 / measurement_noise
             # And the landmark index itself
-            omega.value[lm_iy][lm_iy] += 1.0
+            omega.value[lm_iy][lm_iy] += 1.0 / measurement_noise
 
 
-            xi.value[ix][0] -= lm_info[1] # X update
-            xi.value[lm_ix][0] += lm_info[1] # X update
+            xi.value[ix][0] -= lm_info[1] / measurement_noise # X update
+            xi.value[lm_ix][0] += lm_info[1] / measurement_noise # X update
 
-            xi.value[iy][0] -= lm_info[2] # Y update
-            xi.value[lm_iy][0] += lm_info[2] # Y update
+            xi.value[iy][0] -= lm_info[2] / measurement_noise # Y update
+            xi.value[lm_iy][0] += lm_info[2] / measurement_noise # Y update
             
 
         
@@ -695,17 +695,17 @@ test_data2 = [[[[0, 26.543274387283322, -6.262538160312672], [3, 9.9373968257997
 
 ### Uncomment the following three lines for test case 1 ###
 
-#print "Test case 1"
-#result = slam(test_data1, 20, 5, 2.0, 2.0)
-#print_result(20, 5, result)
-##print result
+print "Test case 1"
+result = slam(test_data1, 20, 5, 2.0, 2.0)
+print_result(20, 5, result)
+#print result
 
 
 ### Uncomment the following three lines for test case 2 ###
 
-#print "Test case 2"
-#result = slam(test_data2, 20, 5, 2.0, 2.0)
-#print_result(20, 5, result)
-##print result
+print "Test case 2"
+result = slam(test_data2, 20, 5, 2.0, 2.0)
+print_result(20, 5, result)
+#print result
 
 
