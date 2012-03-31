@@ -315,12 +315,89 @@ class matrix:
 
 
 
-def calc():
+def doit(initial_pos, move1, move2, Z0, Z1, Z2):
     num_lm = 2
     moves = [5,7,2]
     senses = [[0,2],[1,4],[1,2]]
     measurement_noise = 0.5 # meaning high certainty
     motion_noise = 1.0
+
+    Omega = matrix([[1.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0]])
+    Xi = matrix([[initial_pos],
+                 [0.0],
+                 [0.0],
+                 [0.0],
+                 [0.0]])
+
+
+    # Template
+    Omega += matrix([[0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0]])
+    Xi += matrix([[0.0],
+                 [0.0],
+                 [0.0],
+                 [0.0],
+                 [0.0]])
+
+
+    Omega += matrix([[1.0, -1.0, 0.0, 0.0, 0.0],
+                    [-1.0, 1.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0]])
+    Xi += matrix([[-move1],
+                 [move1],
+                 [0.0],
+                 [0.0],
+                 [0.0]])
+
+    # We know this is the case so I won't bother with the other case
+    if (Z0[0] == 0):
+        Omega += matrix([[2.0, 0.0, 0.0, -2.0, 0.0],
+                        [0.0, 0.0, 0.0, 0.0, 0.0],
+                        [0.0, 0.0, 0.0, 0.0, 0.0],
+                        [-2.0, 0.0, 0.0, 2.0, 0.0],
+                        [0.0, 0.0, 0.0, 0.0, 0.0]])
+        Xi += matrix([[-Z0[1]],
+                     [0.0],
+                     [0.0],
+                     [Z0[1]],
+                     [0.0]])
+
+
+    # We know this is the case so I won't bother with the other case
+    if (Z1[0] == 1):
+        Omega += matrix([[0.0, 0.0, 0.0, 0.0, 0.0],
+                        [0.0, 2.0, 0.0, .0, -2.0],
+                        [0.0, 0.0, 0.0, 0.0, 0.0],
+                        [0.0, 0.0, 0.0, 0.0, 0.0],
+                        [0.0, -2.0, 0.0, 0.0, 2.0]])
+        Xi += matrix([[0.0],
+                     [-Z1[1]],
+                     [0.0],
+                     [0.0],
+                     [Z1[1]]])
+
+
+    if (Z2[0] == 1):
+        Omega += matrix([[0.0, 0.0, 0.0, 0.0, 0.0],
+                        [0.0, 0.0, 0.0, 0.0, 0.0],
+                        [0.0, 0.0, 2.0, 0.0, -2.0],
+                        [0.0, 0.0, 0.0, 0.0, 0.0],
+                        [0.0, 0.0, -2.0, 0.0, 2.0]])
+        Xi += matrix([[0.0],
+                     [0.0],
+                     [-Z2[1]],
+                     [0.0],
+                     [Z2[1]]])
+
 
 #    dimx = len(moves)+2
 #    omega = matrix()
@@ -358,15 +435,15 @@ def calc():
 #        xi.value[lm_ix][0] += sense[1] / measurement_noise # X update
 
     print "omega"
-    omega.show()
+    Omega.show()
     print "xi"
-    xi.show()
+    Xi.show()
 
         
-    mu = omega.inverse() * xi
+    mu = Omega.inverse() * Xi
     print "mu"
     mu.show()
 
 
-calc()
+doit(2,7,2,[0,2],[1,2],[1,2])
 
