@@ -502,7 +502,6 @@ def print_result(N, num_landmarks, result):
 #
 
 ############## ENTER YOUR CODE BELOW HERE ###################
-
 def slam(data, N, num_landmarks, motion_noise, measurement_noise):
     omega = matrix()
     omega.zero(N*2+num_landmarks*2, N*2+num_landmarks*2) # x0,xy0,Lxy0...N
@@ -518,53 +517,73 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
 
     for i in range(N-1):
         seen_landmarks, estimated_position = data[i]
+        
+        ix = i
+        iy = i+1
     
         # Diagonal of the X movement (TODO: add the uncertainty)
-        omega.value[i][i] += 1.0
-        omega.value[i+2][i+2] += 1.0
+        omega.value[ix][ix] += 1.0
+        omega.value[ix+2][ix+2] += 1.0
         # Cross diagonal
-        omega.value[i+2][i] -= 1.0
-        omega.value[i][i+2] -= 1.0
+        omega.value[ix+2][ix] -= 1.0
+        omega.value[ix][ix+2] -= 1.0
 
         # Diagonal of the Y movement (TODO: add the uncertainty)
-        omega.value[i+1][i+1] += 1.0
-        omega.value[i+1+2][i+1+2] += 1.0
+        omega.value[iy][iy] += 1.0
+        omega.value[iy+2][iy+2] += 1.0
         # Cross diagonal
-        omega.value[i+1+2][i+1] -= 1.0
-        omega.value[i+1][i+1+2] -= 1.0
+        omega.value[iy+2][iy] -= 1.0
+        omega.value[iy][iy+2] -= 1.0
         
         xi.value[i][0] -= estimated_position[0] # X update
         xi.value[i+2][0] += estimated_position[0] # X update
-        xi.value[i+1][0] -= estimated_position[1] # Y update
-        xi.value[i+1+2][0] += estimated_position[1] # Y update
+        xi.value[iy][0] -= estimated_position[1] # Y update
+        xi.value[iy+2][0] += estimated_position[1] # Y update
 
 
         # Landmark update
         for lm_info in seen_landmarks:
             lm_no = lm_info[0]
 
-            print "i=%d, landmark #%d seen at %.3f,%.3f" % (i, lm_no, lm_info[1], lm_info[2])
 
-            lm_index = (num_landmarks-1 - lm_no) * -2 # for landmark id#0 this should be -10 for landmark#4 is should be -2
+            lm_ix = (num_landmarks - lm_no) * -2 # for landmark id#0 this should be -10 for landmark#4 is should be -2
+            lm_iy = lm_ix+1
+
+            print "i=%d, landmark #%d seen at %.3f,%.3f. lm_ix,y=%d,%d" % (i, lm_no, lm_info[1], lm_info[2], lm_ix, lm_iy)
+
+            # FIXME: one of the axis' should of course be in relation to i
             
             # Diagonal of the X measurement (TODO: add the uncertainty)
-            omega.value[lm_index][lm_index] += 1.0
-            omega.value[lm_index+2][lm_index+2] += 1.0
-            # Cross diagonal
-            omega.value[lm_index+2][lm_index] -= 1.0
-            omega.value[lm_index][lm_index+2] -= 1.0
-    
-            # Diagonal of the Y measurement (TODO: add the uncertainty)
-            omega.value[lm_index+1][lm_index+1] += 1.0
-            omega.value[lm_index+1+2][lm_index+1+2] += 1.0
-            # Cross diagonal
-            omega.value[lm_index+1+2][lm_index+1] -= 1.0
-            omega.value[lm_index+1][lm_index+1+2] -= 1.0
+            omega.value[lm_ix][ix] += 1.0
+            omega.value[lm_ix+2][ix+2] += 1.0
 
-            xi.value[lm_index][0] -= lm_info[1] # X update
-            xi.value[lm_index+2][0] += lm_info[1] # X update
-            xi.value[lm_index+1][0] -= lm_info[2] # Y update
-            xi.value[lm_index+1+2][0] += lm_info[2] # Y update
+            print "+1 diagonals %d,%d and %d,%d" % ( lm_ix,ix,lm_ix+2,ix+2)
+
+            print "omega at beofre x-diag"
+            omega.show()
+
+            # Cross diagonal
+            omega.value[ix][lm_ix] -= 1.0
+            omega.value[ix+2][lm_ix+2] -= 1.0
+
+            print "-1 (cross) diagonals %d,%d and %d,%d" % ( ix,lm_ix,ix+2,lm_ix+2)
+
+
+            print "omega at after x-diag"
+            omega.show()
+
+    
+#            # Diagonal of the Y measurement (TODO: add the uncertainty)
+#            omega.value[lm_iy][iy] += 1.0
+#            omega.value[lm_iy+2][iy+2] += 1.0
+#            # Cross diagonal
+#            omega.value[][] -= 1.0
+#            omega.value[][] -= 1.0
+
+            xi.value[i][0] -= lm_info[1] # X update
+            xi.value[lm_ix][0] += lm_info[1] # X update
+            xi.value[iy][0] -= lm_info[2] # Y update
+            xi.value[lm_iy][0] += lm_info[2] # Y update
             
 
         
@@ -582,6 +601,7 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
     print "mu"
     mu.show()
     return mu # Make sure you return mu for grading!
+        
         
 ############### ENTER YOUR CODE ABOVE HERE ###################
 
