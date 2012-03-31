@@ -114,7 +114,9 @@ class matrix:
 
     def show(self, txt = ''):
         for i in range(len(self.value)):
-            print txt + '['+ ', '.join('%.3f'%x for x in self.value[i]) + ']' 
+            #print txt + '['+ ', '.join('%+.3f'%x for x in self.value[i]) + ']' 
+            # DEBUG: remove and uncomment above
+            print txt + '['+ ', '.join('%+.3f'%x for x in self.value[i]) + ']' 
         print ' '
 
     # ------------
@@ -557,6 +559,9 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
             # Cross diagonal
             omega.value[ix][lm_ix] -= 1.0
             omega.value[ix+2][lm_ix+2] -= 1.0
+            # And the landmark index itself
+            omega.value[lm_ix][lm_ix] += 1.0
+            
 
             # Diagonal of the Y measurement (TODO: add the uncertainty)
             omega.value[lm_iy][iy] += 1.0
@@ -564,6 +569,9 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
             # Cross diagonal
             omega.value[iy][lm_iy] -= 1.0
             omega.value[iy+2][lm_iy+2] -= 1.0
+            # And the landmark index itself
+            omega.value[lm_iy][lm_iy] += 1.0
+
 
             xi.value[i][0] -= lm_info[1] # X update
             xi.value[lm_ix][0] += lm_info[1] # X update
