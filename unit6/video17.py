@@ -322,11 +322,53 @@ which should return a mu of:
  [5.0]]
 """
 def doit(initial_pos, move1, move2):
-    #
-    #
-    # Add your code here.
-    #
-    #
+    omega = matrix()
+    omega.zero(3,3)
+    xi = matrix()
+    # y,x
+    xi.zero(3,1)
+
+    # set initial position
+    omega.value[0][0] += 1
+    xi.value[0][0] += initial_pos
+
+    print "initial omega"
+    omega.show()
+    print "xi"
+    xi.show()
+
+    # first move
+    omega.value[0][0] += 1
+    omega.value[1][0] -= 1
+    omega.value[0][1] -= 1
+    omega.value[1][1] += 1
+    xi.value[0][0] -= move1
+    xi.value[1][0] += move1
+
+    print "omega (after mv1)"
+    omega.show()
+    print "xi"
+    xi.show()
+
+    # second move
+    omega.value[1][1] += 1
+    omega.value[2][1] -= 1
+    omega.value[1][2] -= 1
+    omega.value[2][2] += 1
+    xi.value[1][0] -= move2
+    xi.value[2][0] += move2
+
+    print "omega (after mv2)"
+    omega.show()
+    print "xi"
+    xi.show()
+
+
+
+    mu = omega.inverse() * xi
+    print "mu"
+    mu.show()
+    
     return mu
 
 doit(-3, 5, 3)
