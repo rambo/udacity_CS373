@@ -695,17 +695,17 @@ test_data2 = [[[[0, 26.543274387283322, -6.262538160312672], [3, 9.9373968257997
 
 ### Uncomment the following three lines for test case 1 ###
 
-print "Test case 1"
-result = slam(test_data1, 20, 5, 2.0, 2.0)
-print_result(20, 5, result)
-#print result
+#print "Test case 1"
+#result = slam(test_data1, 20, 5, 2.0, 2.0)
+#print_result(20, 5, result)
+##print result
 
 
 ### Uncomment the following three lines for test case 2 ###
 
-print "Test case 2"
-result = slam(test_data2, 20, 5, 2.0, 2.0)
-print_result(20, 5, result)
-#print result
+#print "Test case 2"
+#result = slam(test_data2, 20, 5, 2.0, 2.0)
+#print_result(20, 5, result)
+##print result
 
 
