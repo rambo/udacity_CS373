@@ -39,3 +39,17 @@ m4.show()
 m5 = m1.take(range(2,m1.dimx))
 print "m1 slice O1 (m5)"
 m5.show()
+
+x1 = matrix()
+x1.zero(6,1)
+for i in range(x1.dimx):
+    x1.value[i][0] = i+1
+
+print "x1 initialized"
+x1.show()
+
+x2 = x1.take([0,1],[0])
+print "x1 slice C (x2)"
+x2.show()
+
+
