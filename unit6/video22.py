@@ -516,24 +516,21 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
     xi.value[0][0] = world_size / 2.0
     xi.value[1][0] = world_size / 2.0
 
-    print "omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (omega.dimx, omega.dimy, xi.dimx)
+    #print "omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (omega.dimx, omega.dimy, xi.dimx)
 
     for i in range(N-1):
     
         new_dimx = omega.dimx+2
         first_lm_idx = omega.dimx-(num_landmarks*2)
-        
-        
         keep_indices = range(0, first_lm_idx)
         keep_indices += range(first_lm_idx+2,new_dimx)
-        print "keep_indices=%s" % repr(keep_indices)
-        
+#        print "keep_indices=%s" % repr(keep_indices)
         omega = omega.expand(new_dimx, new_dimx, keep_indices, keep_indices)
         xi = xi.expand(new_dimx, 1, keep_indices, [0])
 
-        print "i=%d, omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (i, omega.dimx, omega.dimy, xi.dimx)
-        omega.show()
-        xi.show()
+#        print "i=%d, omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (i, omega.dimx, omega.dimy, xi.dimx)
+#        omega.show()
+#        xi.show()
     
         seen_landmarks, estimated_position = data[i]
         
@@ -544,56 +541,55 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
     
         #print "ix,y=%d,%d ix,y_next=%d,%d" % (ix,iy, ix_next, iy_next)
     
-        # Diagonal of the X movement (TODO: add the uncertainty)
-        omega.value[ix][ix] += 1.0 / motion_noise
-        omega.value[ix_next][ix_next] += 1.0 / motion_noise
+        # Diagonal of the X movement
+        omega.value[ix][ix]             += 1.0 / motion_noise
+        omega.value[ix_next][ix_next]   += 1.0 / motion_noise
         # Cross diagonal
-        omega.value[ix_next][ix] -= 1.0 / motion_noise
-        omega.value[ix][ix_next] -= 1.0 / motion_noise
+        omega.value[ix_next][ix]        -= 1.0 / motion_noise
+        omega.value[ix][ix_next]        -= 1.0 / motion_noise
 
-        # Diagonal of the Y movement (TODO: add the uncertainty)
-        omega.value[iy][iy] += 1.0 / motion_noise
-        omega.value[iy_next][iy_next] += 1.0 / motion_noise
+        # Diagonal of the Y movement
+        omega.value[iy][iy]             += 1.0 / motion_noise
+        omega.value[iy_next][iy_next]   += 1.0 / motion_noise
         # Cross diagonal
-        omega.value[iy_next][iy] -= 1.0 / motion_noise
-        omega.value[iy][iy_next] -= 1.0 / motion_noise
+        omega.value[iy_next][iy]        -= 1.0 / motion_noise
+        omega.value[iy][iy_next]        -= 1.0 / motion_noise
 
-        xi.value[ix][0] -= estimated_position[0] / motion_noise# X update
-        xi.value[ix_next][0] += estimated_position[0] / motion_noise# X update
-        xi.value[iy][0] -= estimated_position[1] / motion_noise# Y update
-        xi.value[iy_next][0] += estimated_position[1] / motion_noise# Y update
+        # Value updates
+        xi.value[ix][0]                 -= estimated_position[0] / motion_noise # X update
+        xi.value[ix_next][0]            += estimated_position[0] / motion_noise # X update
+        xi.value[iy][0]                 -= estimated_position[1] / motion_noise # Y update
+        xi.value[iy_next][0]            += estimated_position[1] / motion_noise # Y update
 
 
         # Landmark update
         for lm_info in seen_landmarks:
             lm_no = lm_info[0]
-
-
             lm_ix = (num_landmarks - lm_no) * -2 # for landmark id#0 this should be -10 for landmark#4 is should be -2
             lm_iy = lm_ix+1
 
             #print "i=%d, landmark #%d seen at %.3f,%.3f. lm_ix,y=%d,%d" % (i, lm_no, lm_info[1], lm_info[2], lm_ix, lm_iy)
 
-            # Diagonals of the X measurement (TODO: add the uncertainty)
-            omega.value[ix][ix] += 1.0 / measurement_noise# Measurement point
-            omega.value[ix][lm_ix] -= 1.0 / measurement_noise
-            omega.value[lm_ix][ix] -= 1.0 / measurement_noise
+            # Diagonals of the X measurement
+            omega.value[ix][ix]         += 1.0 / measurement_noise# Measurement point
+            omega.value[ix][lm_ix]      -= 1.0 / measurement_noise
+            omega.value[lm_ix][ix]      -= 1.0 / measurement_noise
             # And the landmark index itself
-            omega.value[lm_ix][lm_ix] += 1.0 /measurement_noise
+            omega.value[lm_ix][lm_ix]   += 1.0 /measurement_noise
 
-            # Diagonals of the Y measurement (TODO: add the uncertainty)
-            omega.value[iy][iy] += 1.0 / measurement_noise
-            omega.value[iy][lm_iy] -= 1.0 / measurement_noise
-            omega.value[lm_iy][iy] -= 1.0 / measurement_noise
+            # Diagonals of the Y measurement
+            omega.value[iy][iy]         += 1.0 / measurement_noise
+            omega.value[iy][lm_iy]      -= 1.0 / measurement_noise
+            omega.value[lm_iy][iy]      -= 1.0 / measurement_noise
+
             # And the landmark index itself
-            omega.value[lm_iy][lm_iy] += 1.0 / measurement_noise
+            omega.value[lm_iy][lm_iy]   += 1.0 / measurement_noise
 
-
-            xi.value[ix][0] -= lm_info[1] / measurement_noise # X update
-            xi.value[lm_ix][0] += lm_info[1] / measurement_noise # X update
-
-            xi.value[iy][0] -= lm_info[2] / measurement_noise # Y update
-            xi.value[lm_iy][0] += lm_info[2] / measurement_noise # Y update
+            # Value updates
+            xi.value[ix][0]             -= lm_info[1] / measurement_noise # X update
+            xi.value[lm_ix][0]          += lm_info[1] / measurement_noise # X update
+            xi.value[iy][0]             -= lm_info[2] / measurement_noise # Y update
+            xi.value[lm_iy][0]          += lm_info[2] / measurement_noise # Y update
             
 
         
