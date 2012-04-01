@@ -596,7 +596,7 @@ def online_slam(data, N, num_landmarks, motion_noise, measurement_noise):
     
         seen_landmarks, estimated_position = data[i]
         
-        ix = i*2
+        ix = 0 # We're resizing all the the time, the insertion points are constant
         iy = ix+1
         ix_next = ix+2
         iy_next = iy+2
