@@ -647,15 +647,26 @@ def online_slam(data, N, num_landmarks, motion_noise, measurement_noise):
             xi.value[lm_ix][0]          += lm_info[1] / measurement_noise # X update
             xi.value[iy][0]             -= lm_info[2] / measurement_noise # Y update
             xi.value[lm_iy][0]          += lm_info[2] / measurement_noise # Y update
-            
 
+        print "omega at i=%d (before slicing)" % i
+        omega.show()
+        print "xi at i=%d  (before slicing)" % i
+        xi.show()
         
-#        print "omega at i=%d" % i
-#        omega.show()
-#
-#        print "xi at i=%d" % i
-#        xi.show()
+        A = omega.take([0,1],range(omega.dimx-(num_landmarks*2), omega.dimx))
+        B = omega.take([0,1]) # Symmetrical slice needs only the first list
+        C = xi.take([0,1],[0])
         
+        OP = omega.take(range(2,omega.dimx))
+        XP = xi.take(range(xi.dimx-(num_landmarks*2),xi.dimx),[0])
+        
+        omega = OP - A.transpose() * B.inverse() * A
+        xi    = XP - A.transpose() * B.inverse() * C
+        
+        print "omega at i=%d (after slicing)" % i
+        omega.show()
+        print "xi at i=%d  (after slicing)" % i
+        xi.show()
         
         
         
