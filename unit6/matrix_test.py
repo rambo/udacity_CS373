@@ -52,4 +52,8 @@ x2 = x1.take([0,1],[0])
 print "x1 slice C (x2)"
 x2.show()
 
+x3 = x1.take(range(x1.dimx-(num_landmarks*2),x1.dimx),[0])
+print "x1 slice X1 (x3)"
+x3.show()
+
 
