@@ -653,15 +653,36 @@ def online_slam(data, N, num_landmarks, motion_noise, measurement_noise):
         print "xi at i=%d  (before slicing)" % i
         xi.show()
         
-        A = omega.take([0,1],range(omega.dimx-(num_landmarks*2), omega.dimx))
+        A = omega.take([0,1],range(omega.dimx-(num_landmarks*2)-2, omega.dimx))
         B = omega.take([0,1]) # Symmetrical slice needs only the first list
         C = xi.take([0,1],[0])
         
         OP = omega.take(range(2,omega.dimx))
-        XP = xi.take(range(xi.dimx-(num_landmarks*2),xi.dimx),[0])
+        XP = xi.take(range(xi.dimx-(num_landmarks*2)-2,xi.dimx),[0])
         
-        omega = OP - A.transpose() * B.inverse() * A
-        xi    = XP - A.transpose() * B.inverse() * C
+
+        print "A"
+        A.show()
+        print "B"
+        B.show()
+        print "C"
+        C.show()
+        print "OP"
+        OP.show()
+        print "XP"
+        XP.show()
+
+        At = A.transpose()
+        Binv = B.inverse()
+
+        print "A.transpose"
+        At.show()
+        print "B.inverse"
+        Binv.show()
+        
+        
+        omega = OP - At * Binv * A
+        xi    = XP - At * Binv * C
         
         print "omega at i=%d (after slicing)" % i
         omega.show()
@@ -791,8 +812,9 @@ answer_omega1      = matrix([[0.36603773584905663, 0.0, -0.169811320754717, 0.0,
                              [-0.1811320754716981, 0.0, -0.4056603773584906, 0.0, -0.360377358490566, 0.0, 1.2339622641509433, 0.0],
                              [0.0, -0.1811320754716981, 0.0, -0.4056603773584906, 0.0, -0.360377358490566, 0.0, 1.2339622641509433]])
 
-#result = online_slam(testdata1, 5, 3, 2.0, 2.0)
-#solution_check(result, answer_mu1, answer_omega1)
+print "Test case 1"
+result = online_slam(testdata1, 5, 3, 2.0, 2.0)
+solution_check(result, answer_mu1, answer_omega1)
 
 
 # -----------
@@ -818,7 +840,8 @@ answer_omega2      = matrix([[0.22871751620895048, 0.0, -0.11351536555795691, 0.
                              [-0.11351536555795691, 0.0, -0.46327947920510265, 0.0, 0.7867205207948973, 0.0],
                              [0.0, -0.11351536555795691, 0.0, -0.46327947920510265, 0.0, 0.7867205207948973]])
 
-#result = online_slam(testdata2, 6, 2, 3.0, 4.0)
-#solution_check(result, answer_mu2, answer_omega2)
+print "Test case 2"
+result = online_slam(testdata2, 6, 2, 3.0, 4.0)
+solution_check(result, answer_mu2, answer_omega2)
 
 
