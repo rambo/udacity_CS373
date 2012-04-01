@@ -506,9 +506,9 @@ def print_result(N, num_landmarks, result):
 ############## ENTER YOUR CODE BELOW HERE ###################
 def slam(data, N, num_landmarks, motion_noise, measurement_noise):
     omega = matrix()
-    omega.zero(N*2+num_landmarks*2, N*2+num_landmarks*2) # x0,xy0,Lxy0...N
+    omega.zero(2+num_landmarks*2, 2+num_landmarks*2) # x0,xy0,Lxy0...N
     xi = matrix()
-    xi.zero(N*2+num_landmarks*2,1)
+    xi.zero(2+num_landmarks*2,1)
     
     # Initial position
     omega.value[0][0] = 1.0 # Initial X
@@ -516,9 +516,25 @@ def slam(data, N, num_landmarks, motion_noise, measurement_noise):
     xi.value[0][0] = world_size / 2.0
     xi.value[1][0] = world_size / 2.0
 
-    #print "omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (omega.dimx, omega.dimy, xi.dimx)
+    print "omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (omega.dimx, omega.dimy, xi.dimx)
 
     for i in range(N-1):
+    
+        new_dimx = omega.dimx+2
+        first_lm_idx = omega.dimx-(num_landmarks*2)
+        
+        
+        keep_indices = range(0, first_lm_idx)
+        keep_indices += range(first_lm_idx+2,omega.dimx)
+        print "keep_indices=%s" % repr(keep_indices)
+        
+        omega = omega.expand(new_dimx, new_dimx, keep_indices, keep_indices)
+        xi = xi.expand(new_dimx, 1, keep_indices, [0])
+
+        print "i=%d, omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (i, omega.dimx, omega.dimy, xi.dimx)
+        omega.show()
+        xi.show()
+    
         seen_landmarks, estimated_position = data[i]
         
         ix = i*2
