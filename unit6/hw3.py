@@ -573,10 +573,15 @@ def online_slam(data, N, num_landmarks, motion_noise, measurement_noise):
     xi.value[0][0] = world_size / 2.0
     xi.value[1][0] = world_size / 2.0
 
-    #print "omega.dimx=%d, omega.dimy=%d, xi.dimx=%d" % (omega.dimx, omega.dimy, xi.dimx)
+    #print "omega.dimx=%d, omega.dimy=%d, xi.dimx=%d, num_landmarks=%d" % (omega.dimx, omega.dimy, xi.dimx, num_landmarks)
 
     for i in range(N-1):
     
+        print "omega (dimx=%d, num_landmarks=%d) at i=%d (before expanding)" % (omega.dimx, num_landmarks, i)
+        omega.show()
+        print "xi at i=%d  (before expanding)" % i
+        xi.show()
+
         new_dimx = omega.dimx+2
         first_lm_idx = omega.dimx-(num_landmarks*2)
         keep_indices = range(0, first_lm_idx)
@@ -648,28 +653,30 @@ def online_slam(data, N, num_landmarks, motion_noise, measurement_noise):
             xi.value[iy][0]             -= lm_info[2] / measurement_noise # Y update
             xi.value[lm_iy][0]          += lm_info[2] / measurement_noise # Y update
 
-        print "omega at i=%d (before slicing)" % i
+        print "omega (dimx=%d) at i=%d (before slicing)" % (omega.dimx, i)
         omega.show()
-        print "xi at i=%d  (before slicing)" % i
+        print "xi (dimx=%d) at i=%d  (before slicing)" % (xi.dimx, i)
         xi.show()
         
-        A = omega.take([0,1],range(omega.dimx-(num_landmarks*2)-2, omega.dimx))
+        lm_et_lastcoord_idx = omega.dimx-(num_landmarks*2)-2
+        
+        A = omega.take([0,1],range(lm_et_lastcoord_idx, omega.dimx))
         B = omega.take([0,1]) # Symmetrical slice needs only the first list
         C = xi.take([0,1],[0])
         
         OP = omega.take(range(2,omega.dimx))
-        XP = xi.take(range(xi.dimx-(num_landmarks*2)-2,xi.dimx),[0])
+        XP = xi.take(range(lm_et_lastcoord_idx, xi.dimx),[0])
         
 
-        print "A"
+        print "A (dimy=%d)" % A.dimy
         A.show()
-        print "B"
+        print "B (dimx=%d)" % B.dimx
         B.show()
-        print "C"
+        print "C (dimx=%d)" % C.dimx
         C.show()
-        print "OP"
+        print "OP (dimx=%d)" % OP.dimx
         OP.show()
-        print "XP"
+        print "XP (dimx=%d)" % XP.dimx
         XP.show()
 
         At = A.transpose()
@@ -684,9 +691,9 @@ def online_slam(data, N, num_landmarks, motion_noise, measurement_noise):
         omega = OP - At * Binv * A
         xi    = XP - At * Binv * C
         
-        print "omega at i=%d (after slicing)" % i
+        print "omega (dimx=%d) at i=%d (after slicing)" % (omega.dimx, i)
         omega.show()
-        print "xi at i=%d  (after slicing)" % i
+        print "xi (dimx=%d) at i=%d  (after slicing)" % (xi.dimx, i)
         xi.show()
         
         
