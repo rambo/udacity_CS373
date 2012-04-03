@@ -122,10 +122,10 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
     road_cpy[y][x] = 'X'
     road_cpy[goal[0]][goal[1]] = '*'
     
-    print "Road (lane_change_cost=%f)" % lane_change_cost
-    show(road)
-    print "Initial pos and goal"
-    show(road_cpy)
+#    print "Road (lane_change_cost=%f)" % lane_change_cost
+#    show(road)
+#    print "Initial pos and goal"
+#    show(road_cpy)
 #    print "Closed list"
 #    show(closed)
 
@@ -138,35 +138,34 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
         #print "gi=%d len(open)=%d" % (gi, len(open))
         #print open
         if len(open) == 0:
-            print "Nothing left to do, closed list"
-            show(closed)
+            #print "Nothing left to do, closed list"
+            #show(closed)
             break
             
         open.sort()
-        print "Sorted open list"
-        for item in open:
-            print "    [%f,[%d,%d]]" % (item[0],item[1],item[2])
+#        print "Sorted open list"
+#        for item in open:
+#            print "    [%f,[%d,%d]]" % (item[0],item[1],item[2])
 
         next = open.pop(0) # we can pop the zeroeth element, no need to reverse
         g = next[0]
         x = next[1]
         y = next[2]
 
-        road_cpy = copy_road(road)
-        road_cpy[y][x] = 'X'
-        print "checking pos %d,%d cost is %f" % (x,y,g)
-        show(road_cpy)
-#            print "Closed list"
-#            show(closed)
+#        road_cpy = copy_road(road)
+#        road_cpy[y][x] = 'X'
+#        print "checking pos %d,%d cost is %f" % (x,y,g)
+#        show(road_cpy)
 
         
         if x == goal[1] and y == goal[0]:
+            # It seems we actually do not end up with more than one solution even when I though this change would make the search exhaustive
             if g < best_g:
-                print "Found a solution %f which is better than %f" % (g, best_g)
+                #print "Found a solution %f which is better than %f" % (g, best_g)
                 best_g = g
                 found_list.append([g, next])
             else:
-                print "Found a solution %f which is worse than %f" % (g, best_g)
+                #print "Found a solution %f which is worse than %f" % (g, best_g)
                 found_list.append([g, next])
             continue
         
@@ -175,18 +174,18 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
             x2 = x + legal_moves[i][0]
             y2 = y + legal_moves[i][1]
             
-            print "next x,y=%d,%d" % (x2,y2)
+            #print "next x,y=%d,%d" % (x2,y2)
             
             actions = next[3][:] # Create a copy by slicing
             actions.append(i)
             
             if (   x2 < 0 or x2 >= len(road[0]) 
                 or y2 < 0 or y2 >= len(road)): 
-                print "%d,%d is off the road!" % (x2,y2)
+                #print "%d,%d is off the road!" % (x2,y2)
                 continue
 
             if road[y2][x2] == 0: 
-                print "%d,%d has an obstacle!" % (x2,y2)
+                #print "%d,%d has an obstacle!" % (x2,y2)
                 continue
 
             g2 = g + 1.0/road[y2][x2]
@@ -194,11 +193,11 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
                 g2 += lane_change_cost
 
             if closed[y2][x2] < g2:
-                print "%d,%d is on the closed list with better cost (%f < %f)" % (x2,y2,closed[y2][x2],g2)
+                #print "%d,%d is on the closed list with better cost (%f < %f)" % (x2,y2,closed[y2][x2],g2)
                 continue
 
 
-            print "appending next(%d,%d) speed=%d cost %f. speed at current(%d,%d)=%d" % (x2,y2,road[y2][x2],g2,x,y,road[y][x])
+            #print "appending next(%d,%d) speed=%d cost %f. speed at current(%d,%d)=%d" % (x2,y2,road[y2][x2],g2,x,y,road[y][x])
 
             open.append([g2, x2, y2, actions])
             closed[y2][x2] = g2
@@ -209,9 +208,9 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
         return False
     
     found_list.sort()
-    print "Sorted solution list"
-    for item in found_list:
-        print "    %f, %d moves" % (item[0],len(item[1][3]))
+#    print "Sorted solution list"
+#    for item in found_list:
+#        print "    %f, %d moves" % (item[0],len(item[1][3]))
     
     
     
