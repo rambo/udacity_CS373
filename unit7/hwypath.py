@@ -170,7 +170,7 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
                         #print "checking %d,%d (i=%d) speed(%d,%d)=%d speed(%d,%d)=%d" % (x2,y2,i,x2,y2,road[y2][x2])
                         if closed[y2][x2] == 0: 
                             print "appending next(%d,%d) speed at current(%d,%d)=%d" % (x2,y2,x,y,road[y][x])
-                            g2 = g + 1.0/road[y][x]
+                            g2 = g + 1.0/road[y2][x2]
                             if legal_moves[i][1] <> 0:
                                 g2 += lane_change_cost
                             open.append([g2, x2, y2, actions])
