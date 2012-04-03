@@ -88,8 +88,8 @@ def build_road(length, lane_speeds, print_flag = False, obstacles = False, obsta
 #
 def plan(road, lane_change_cost, init, goal): # Don't change the name of this function!
     legal_moves = [[1,0], # staright
-                   [1,-1], # lane change left
-                   [1,1]] # lane change right
+                   [1,-1], # lane change left (and move forward)
+                   [1,1]] # lane change right (and move forward)
 
     closed = [[0 for row in range(len(road[0]))] for col in range(len(road))]
     closed[init[0]][init[1]] = 1
@@ -172,7 +172,7 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
                             g2 = g + 1.0/road[y2][x2]
                             if legal_moves[i][1] <> 0:
                                 g2 += lane_change_cost
-                            print "appending next(%d,%d) speed=%f cost %f. speed at current(%d,%d)=%d" % (x2,y2,road[y2][x2],g2,x,y,road[y][x])
+                            print "appending next(%d,%d) speed=%d cost %f. speed at current(%d,%d)=%d" % (x2,y2,road[y2][x2],g2,x,y,road[y][x])
                             open.append([g2, x2, y2, actions])
                             closed[y2][x2] = 1
 
