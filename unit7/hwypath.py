@@ -87,11 +87,92 @@ def build_road(length, lane_speeds, print_flag = False, obstacles = False, obsta
 # lane_change_cost.
 #
 def plan(road, lane_change_cost, init, goal): # Don't change the name of this function!
-    #
-    #
-    # Insert Code Here
-    #
-    #
+    legal_moves = [[1,0], # staright
+                   [1,-1], # lane change left
+                   [1,1]] # lane change right
+
+    closed = [[0 for row in range(len(road[0]))] for col in range(len(road))]
+    closed[init[0]][init[1]] = 1
+
+    x = init[1]
+    y = init[0]
+    g = 0
+
+    open = [[g, x, y, []]]
+
+    found = False  # flag that is set when search is complet
+    resign = False # flag set if we can't find expand
+
+    
+    def show(p):
+        for i in range(len(p)):
+            print p[i]
+
+    def copy_array(p):
+        q = []
+        for row in range(len(p)):
+            subq = []
+            for col in range(len(p[0])):
+                subq.append(float(p[row][col]))
+            q.append(subq)
+        return q
+
+    road_cpy = copy_array(road)
+    road_cpy[y][x] = '*'
+    
+    show(road_cpy)
+
+
+
+    gi = 0
+    while not found and not resign:
+        gi+=1
+        print "gi=%d len(open)=%d" % (gi, len(open))
+        #print open
+        if len(open) == 0:
+            resign = True
+            print "Gave up"
+            return False
+        else:
+            open.sort()
+            next = open.pop(0) # we can pop the zeroeth element, no need to reverse
+            x = next[1]
+            y = next[2]
+            g = next[0]
+            
+            if x == goal[0] and y == goal[1]:
+                print "Found!, cost is %f" % g
+                cost = g
+                found = True
+            else:
+                for i in range(len(legal_moves)):
+                    x2 = x + legal_moves[i][0]
+                    y2 = y + legal_moves[i][1]
+                    print "next x,y=%d,%d" % (x2,y2)
+                    actions = next[3][:] # Create a copy by slicing
+                    actions.append(i)
+                    if x2 >= 0 and x2 < len(road) and y2 >=0 and y2 < len(road[0]):
+                        print "checking %d,%d (i=%d) speed=%d" % (x2,y2,i,road[x2][y2])
+                        if closed[x2][y2] == 0: 
+                            g2 = g + 1.0/road[x2][y2]
+                            if legal_moves[i][1] <> 0:
+                                g2 += lane_change_cost
+                            open.append([g2, x2, y2, actions])
+                            closed[x2][y2] = 1
+    path = [[' ' for row in range(len(road[0]))] for col in range(len(road))] # init empty path
+    path[x][y] = '*'
+    actions = next[3]
+    path_x = init[0]
+    path_y = init[1]
+    for i in range(len(actions)):
+        path[path_x][path_y] = delta_name[actions[i]]
+        path_x += delta[actions[i]][0]
+        path_y += delta[actions[i]][1]
+        
+    for i in range(len(path)):
+        print path[i]
+    
+
     return cost
 
 ################# TESTING ##################
@@ -164,7 +245,7 @@ testing_suite = [[test_road1, test_road2, test_road3, test_road4],
                  [test_goal1, test_goal2, test_goal3, test_goal4],
                  [true_cost1, true_cost2, true_cost3, true_cost4]]
 
-#solution_check(testing_suite) #UNCOMMENT THIS LINE TO TEST YOUR CODE
+solution_check(testing_suite) #UNCOMMENT THIS LINE TO TEST YOUR CODE
 
 
 
