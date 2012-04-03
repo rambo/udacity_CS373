@@ -120,14 +120,18 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
     road_cpy = copy_array(road)
     road_cpy[y][x] = '*'
     
-    show(road_cpy)
-
+    print "Road"
+    show(road)
+#    print "Initial pos"
+#    show(road_cpy)
+#    print "Closed list"
+#    show(closed)
 
 
     gi = 0
     while not found and not resign:
         gi+=1
-        print "gi=%d len(open)=%d" % (gi, len(open))
+        #print "gi=%d len(open)=%d" % (gi, len(open))
         #print open
         if len(open) == 0:
             resign = True
@@ -139,8 +143,16 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
             x = next[1]
             y = next[2]
             g = next[0]
+
+#            road_cpy = copy_array(road)
+#            road_cpy[y][x] = '*'
+#            print "Current pos"
+#            show(road_cpy)
+#            print "Closed list"
+#            show(closed)
+
             
-            if x == goal[0] and y == goal[1]:
+            if x == goal[1] and y == goal[0]:
                 print "Found!, cost is %f" % g
                 cost = g
                 found = True
@@ -148,26 +160,34 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
                 for i in range(len(legal_moves)):
                     x2 = x + legal_moves[i][0]
                     y2 = y + legal_moves[i][1]
-                    print "next x,y=%d,%d" % (x2,y2)
+                    #print "next x,y=%d,%d" % (x2,y2)
                     actions = next[3][:] # Create a copy by slicing
                     actions.append(i)
-                    if x2 >= 0 and x2 < len(road) and y2 >=0 and y2 < len(road[0]):
-                        print "checking %d,%d (i=%d) speed=%d" % (x2,y2,i,road[x2][y2])
-                        if closed[x2][y2] == 0: 
-                            g2 = g + 1.0/road[x2][y2]
+                    if x2 >= 0 and x2 < len(road[0]) and y2 >=0 and y2 < len(road): # while we're in the grid
+                        if road[y2][x2] == 0: # speed 0, obstacle!!
+                            continue
+                        
+                        #print "checking %d,%d (i=%d) speed(%d,%d)=%d speed(%d,%d)=%d" % (x2,y2,i,x2,y2,road[y2][x2])
+                        if closed[y2][x2] == 0: 
+                            print "appending next(%d,%d) speed at current(%d,%d)=%d" % (x2,y2,x,y,road[y][x])
+                            g2 = g + 1.0/road[y][x]
                             if legal_moves[i][1] <> 0:
                                 g2 += lane_change_cost
                             open.append([g2, x2, y2, actions])
-                            closed[x2][y2] = 1
+                            closed[y2][x2] = 1
+
+
+    move_names = ['>', '^', 'v']
+
     path = [[' ' for row in range(len(road[0]))] for col in range(len(road))] # init empty path
-    path[x][y] = '*'
+    path[y][x] = '*'
     actions = next[3]
-    path_x = init[0]
-    path_y = init[1]
+    path_x = init[1]
+    path_y = init[0]
     for i in range(len(actions)):
-        path[path_x][path_y] = delta_name[actions[i]]
-        path_x += delta[actions[i]][0]
-        path_y += delta[actions[i]][1]
+        path[path_y][path_x] = move_names[actions[i]]
+        path_x += legal_moves[actions[i]][0]
+        path_y += legal_moves[actions[i]][1]
         
     for i in range(len(path)):
         print path[i]
