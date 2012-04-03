@@ -92,8 +92,8 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
                    [1,-1], # lane change left (and move forward)
                    [1,1]] # lane change right (and move forward)
 
-    closed = [[0 for row in range(len(road[0]))] for col in range(len(road))]
-    closed[init[0]][init[1]] = 1
+    closed = [[100 for row in range(len(road[0]))] for col in range(len(road))]
+    closed[init[0]][init[1]] = 100
 
     x = init[1]
     y = init[0]
@@ -189,18 +189,19 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
                 print "%d,%d has an obstacle!" % (x2,y2)
                 continue
 
-            if closed[y2][x2] > 0:
-                print "%d,%d is on the closed list" % (x2,y2)
-                continue
-
             g2 = g + 1.0/road[y2][x2]
             if legal_moves[i][1] <> 0:
                 g2 += lane_change_cost
 
+            if closed[y2][x2] < g2:
+                print "%d,%d is on the closed list with better cost (%f < %f)" % (x2,y2,closed[y2][x2],g2)
+                continue
+
+
             print "appending next(%d,%d) speed=%d cost %f. speed at current(%d,%d)=%d" % (x2,y2,road[y2][x2],g2,x,y,road[y][x])
 
             open.append([g2, x2, y2, actions])
-            closed[y2][x2] = 1
+            closed[y2][x2] = g2
 
 
     if len(found_list) == 0:
