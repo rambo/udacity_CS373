@@ -130,67 +130,93 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
 #    show(closed)
 
 
+    found_list = []
+    best_g = 100
     gi = 0
-    while not found and not resign:
+    while True:
         gi+=1
         #print "gi=%d len(open)=%d" % (gi, len(open))
         #print open
         if len(open) == 0:
-            resign = True
-            print "Gave up"
-            return False
-        else:
-            open.sort()
-            print "Sorted open list"
-            for item in open:
-                print "    [%f,%d,%d]" % (item[0],item[1],item[2])
+            print "Nothing left to do, closed list"
+            show(closed)
+            break
+            
+        open.sort()
+        print "Sorted open list"
+        for item in open:
+            print "    [%f,[%d,%d]]" % (item[0],item[1],item[2])
 
-            next = open.pop(0) # we can pop the zeroeth element, no need to reverse
-            g = next[0]
-            x = next[1]
-            y = next[2]
+        next = open.pop(0) # we can pop the zeroeth element, no need to reverse
+        g = next[0]
+        x = next[1]
+        y = next[2]
 
-            road_cpy = copy_road(road)
-            road_cpy[y][x] = 'X'
-            print "checking pos %d,%d cost is %f" % (x,y,g)
-            show(road_cpy)
+        road_cpy = copy_road(road)
+        road_cpy[y][x] = 'X'
+        print "checking pos %d,%d cost is %f" % (x,y,g)
+        show(road_cpy)
 #            print "Closed list"
 #            show(closed)
 
-            
-            if x == goal[1] and y == goal[0]:
-                print "Found!, cost is %f" % g
-                cost = g
-                found = True
+        
+        if x == goal[1] and y == goal[0]:
+            if g < best_g:
+                print "Found a solution %f which is better than %f" % (g, best_g)
+                best_g = g
+                found_list.append([g, next])
             else:
-                for i in range(len(legal_moves)):
-                    x2 = x + legal_moves[i][0]
-                    y2 = y + legal_moves[i][1]
-                    #print "next x,y=%d,%d" % (x2,y2)
-                    actions = next[3][:] # Create a copy by slicing
-                    actions.append(i)
-                    
-                    if (   x2 < 0 or x2 >= len(road[0]) 
-                        or y2 < 0 or y2 >= len(road)): 
-                        print "%d,%d is off the road!" % (x2,y2)
-                        continue
+                print "Found a solution %f which is worse than %f" % (g, best_g)
+                found_list.append([g, next])
+            continue
+        
+        # Got this far, start expanding
+        for i in range(len(legal_moves)):
+            x2 = x + legal_moves[i][0]
+            y2 = y + legal_moves[i][1]
+            
+            print "next x,y=%d,%d" % (x2,y2)
+            
+            actions = next[3][:] # Create a copy by slicing
+            actions.append(i)
+            
+            if (   x2 < 0 or x2 >= len(road[0]) 
+                or y2 < 0 or y2 >= len(road)): 
+                print "%d,%d is off the road!" % (x2,y2)
+                continue
 
-                    if road[y2][x2] == 0: 
-                        print "%d,%d has an obstacle!" % (x2,y2)
-                        continue
-                    
-                    if closed[y2][x2] > 0:
-                        print "%d,%d is on the closed list" % (x2,y2)
-                        continue
+            if road[y2][x2] == 0: 
+                print "%d,%d has an obstacle!" % (x2,y2)
+                continue
 
-                    g2 = g + 1.0/road[y2][x2]
-                    if legal_moves[i][1] <> 0:
-                        g2 += lane_change_cost
-                    print "appending next(%d,%d) speed=%d cost %f. speed at current(%d,%d)=%d" % (x2,y2,road[y2][x2],g2,x,y,road[y][x])
-                    #heuristic = 0
-                    open.append([g2, x2, y2, actions])
-                    closed[y2][x2] = 1
+            if closed[y2][x2] > 0:
+                print "%d,%d is on the closed list" % (x2,y2)
+                continue
 
+            g2 = g + 1.0/road[y2][x2]
+            if legal_moves[i][1] <> 0:
+                g2 += lane_change_cost
+
+            print "appending next(%d,%d) speed=%d cost %f. speed at current(%d,%d)=%d" % (x2,y2,road[y2][x2],g2,x,y,road[y][x])
+
+            open.append([g2, x2, y2, actions])
+            closed[y2][x2] = 1
+
+
+    if len(found_list) == 0:
+        print "Fail!"
+        return False
+    
+    found_list.sort()
+    print "Sorted solution list"
+    for item in found_list:
+        print "    %f, %d moves" % (item[0],len(item[1][3]))
+    
+    
+    
+    cost,next = found_list.pop(0)
+    x = next[1]
+    y = next[2]
 
     move_names = ['>', '^', 'v']
 
@@ -281,6 +307,7 @@ testing_suite = [[test_road1, test_road2, test_road3, test_road4],
                  [true_cost1, true_cost2, true_cost3, true_cost4]]
 
 solution_check(testing_suite) #UNCOMMENT THIS LINE TO TEST YOUR CODE
+#solution_check([[test_road4],[lane_change_cost4],[test_init4],[test_goal4], [true_cost4]]
 
 
 
