@@ -306,8 +306,8 @@ testing_suite = [[test_road1, test_road2, test_road3, test_road4],
                  [test_goal1, test_goal2, test_goal3, test_goal4],
                  [true_cost1, true_cost2, true_cost3, true_cost4]]
 
-solution_check(testing_suite) #UNCOMMENT THIS LINE TO TEST YOUR CODE
-#solution_check([[test_road4],[lane_change_cost4],[test_init4],[test_goal4], [true_cost4]]
+#solution_check(testing_suite) #UNCOMMENT THIS LINE TO TEST YOUR CODE
+solution_check([[test_road4],[lane_change_cost4],[test_init4],[test_goal4], [true_cost4]])
 
 
 
