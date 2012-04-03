@@ -140,6 +140,9 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
             return False
         else:
             open.sort()
+            print "Sorted open list"
+            for item in open:
+                print "    [%f,%f,%d,%d]" % (item[0],item[1],item[2],item[3])
             next = open.pop(0) # we can pop the zeroeth element, no need to reverse
             x = next[2]
             y = next[3]
@@ -164,20 +167,29 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
                     #print "next x,y=%d,%d" % (x2,y2)
                     actions = next[4][:] # Create a copy by slicing
                     actions.append(i)
-                    if x2 >= 0 and x2 < len(road[0]) and y2 >=0 and y2 < len(road): # while we're in the grid
-                        if road[y2][x2] == 0: # speed 0, obstacle!!
-                            continue
-                        
-                        #print "checking %d,%d (i=%d) speed(%d,%d)=%d speed(%d,%d)=%d" % (x2,y2,i,x2,y2,road[y2][x2])
-                        if closed[y2][x2] == 0: 
-                            g2 = g + 1.0/road[y2][x2]
-                            if legal_moves[i][1] <> 0:
-                                g2 += lane_change_cost
-                            print "appending next(%d,%d) speed=%d cost %f. speed at current(%d,%d)=%d" % (x2,y2,road[y2][x2],g2,x,y,road[y][x])
-                            heuristic = math.sqrt((goal[1]-x2)**2+(goal[0]-y2)**2) # So called manhattan heuristic, lenght of hypotenuse to goal
-                            print "heuristic=%f" % heuristic
-                            open.append([g2+heuristic, g2, x2, y2, actions])
-                            closed[y2][x2] = 1
+                    
+                    if (   x2 < 0 or x2 >= len(road[0]) 
+                        or y2 < 0 or y2 >= len(road)): 
+                        print "%d,%d is off the road!" % (x2,y2)
+                        continue
+
+                    if road[y2][x2] == 0: 
+                        print "%d,%d has an obstacle!" % (x2,y2)
+                        continue
+                    
+                    if closed[y2][x2] > 0:
+                        print "%d,%d is on the closed list" % (x2,y2)
+                        continue
+
+                    g2 = g + 1.0/road[y2][x2]
+                    if legal_moves[i][1] <> 0:
+                        g2 += lane_change_cost
+                    heuristic = math.sqrt((goal[1]-x2)**2+(goal[0]-y2)**2)/100 # So called manhattan heuristic, lenght of hypotenuse to goal
+                    print "math.sqrt((%d-%d)**2+(%d-%d)**2)/100=%f" % (goal[1], x2, goal[0], y2, heuristic)
+                    print "appending next(%d,%d) speed=%d cost %f (%f). speed at current(%d,%d)=%d" % (x2,y2,road[y2][x2],g2, g2+heuristic,x,y,road[y][x])
+                    #heuristic = 0
+                    open.append([g2+heuristic, g2, x2, y2, actions])
+                    closed[y2][x2] = 1
 
 
     move_names = ['>', '^', 'v']
