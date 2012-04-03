@@ -87,6 +87,7 @@ def build_road(length, lane_speeds, print_flag = False, obstacles = False, obsta
 # lane_change_cost.
 #
 def plan(road, lane_change_cost, init, goal): # Don't change the name of this function!
+    import math
     legal_moves = [[1,0], # staright
                    [1,-1], # lane change left (and move forward)
                    [1,1]] # lane change right (and move forward)
@@ -98,7 +99,7 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
     y = init[0]
     g = 0
 
-    open = [[g, x, y, []]]
+    open = [[0, g, x, y, []]]
 
     found = False  # flag that is set when search is complet
     resign = False # flag set if we can't find expand
@@ -108,16 +109,16 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
         for i in range(len(p)):
             print p[i]
 
-    def copy_array(p):
+    def copy_road(p):
         q = []
         for row in range(len(p)):
             subq = []
             for col in range(len(p[0])):
-                subq.append(float(p[row][col]))
+                subq.append(int(p[row][col]))
             q.append(subq)
         return q
 
-    road_cpy = copy_array(road)
+    road_cpy = copy_road(road)
     road_cpy[y][x] = '*'
     
     print "Road"
@@ -140,16 +141,16 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
         else:
             open.sort()
             next = open.pop(0) # we can pop the zeroeth element, no need to reverse
-            x = next[1]
-            y = next[2]
-            g = next[0]
+            x = next[2]
+            y = next[3]
+            g = next[1]
 
-#            road_cpy = copy_array(road)
-#            road_cpy[y][x] = '*'
-#            print "Current pos"
-#            show(road_cpy)
-#            print "Closed list"
-#            show(closed)
+            road_cpy = copy_road(road)
+            road_cpy[y][x] = '*'
+            print "checking pos %d,%d cost if %f" % (x,y,g)
+            show(road_cpy)
+            print "Closed list"
+            show(closed)
 
             
             if x == goal[1] and y == goal[0]:
@@ -161,7 +162,7 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
                     x2 = x + legal_moves[i][0]
                     y2 = y + legal_moves[i][1]
                     #print "next x,y=%d,%d" % (x2,y2)
-                    actions = next[3][:] # Create a copy by slicing
+                    actions = next[4][:] # Create a copy by slicing
                     actions.append(i)
                     if x2 >= 0 and x2 < len(road[0]) and y2 >=0 and y2 < len(road): # while we're in the grid
                         if road[y2][x2] == 0: # speed 0, obstacle!!
@@ -173,7 +174,9 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
                             if legal_moves[i][1] <> 0:
                                 g2 += lane_change_cost
                             print "appending next(%d,%d) speed=%d cost %f. speed at current(%d,%d)=%d" % (x2,y2,road[y2][x2],g2,x,y,road[y][x])
-                            open.append([g2, x2, y2, actions])
+                            heuristic = math.sqrt((goal[1]-x2)**2+(goal[0]-y2)**2) # So called manhattan heuristic, lenght of hypotenuse to goal
+                            print "heuristic=%f" % heuristic
+                            open.append([g2+heuristic, g2, x2, y2, actions])
                             closed[y2][x2] = 1
 
 
@@ -181,7 +184,7 @@ def plan(road, lane_change_cost, init, goal): # Don't change the name of this fu
 
     path = [[' ' for row in range(len(road[0]))] for col in range(len(road))] # init empty path
     path[y][x] = '*'
-    actions = next[3]
+    actions = next[4]
     path_x = init[1]
     path_y = init[0]
     for i in range(len(actions)):
