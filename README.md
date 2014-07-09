@@ -5,3 +5,4 @@ I would very much like to put all the Udacity provided materials here too but I 
 
 If you're on the course do not copy my code as is, you'll only cheat yourself... Feel free to copy ideas though.
 
+The tests submodule is not by me, it was very handy especially for some of the more advanced homework tasks though.
